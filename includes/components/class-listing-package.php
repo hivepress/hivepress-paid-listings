@@ -39,6 +39,9 @@ final class Listing_Package {
 
 		if ( is_admin() ) {
 
+			// Hide package todos.
+			add_filter( 'comments_clauses', [ $this, 'hide_package_todos' ] );
+
 			// Filter meta fields.
 			add_filter( 'hivepress/v1/meta_boxes/listing_package_settings', [ $this, 'filter_meta_fields' ] );
 		} else {
@@ -136,6 +139,22 @@ final class Listing_Package {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Hides package todos.
+	 *
+	 * @param array $query Query arguments.
+	 * @return array
+	 */
+	public function hide_package_todos( $query ) {
+		global $pagenow;
+
+		if ( in_array( $pagenow, [ 'index.php', 'edit-comments.php' ], true ) ) {
+			$query['where'] .= ' AND comment_type != "hp_package_todo"';
+		}
+
+		return $query;
 	}
 
 	/**

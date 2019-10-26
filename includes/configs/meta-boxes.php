@@ -16,12 +16,19 @@ return [
 		'screen' => 'listing_package',
 
 		'fields' => [
-			'product' => [
+			'product'       => [
 				'label'     => esc_html__( 'WooCommerce Product', 'hivepress-paid-listings' ),
 				'type'      => 'select',
 				'options'   => 'posts',
 				'post_type' => 'product',
 				'order'     => 10,
+			],
+
+			'listing_limit' => [
+				'label'     => esc_html__( 'Listing Limit', 'hivepress-paid-listings' ),
+				'type'      => 'number',
+				'min_value' => 1,
+				'order'     => 20,
 			],
 		],
 	],
