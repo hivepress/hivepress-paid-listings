@@ -45,7 +45,7 @@ class Listing_Package extends Controller {
 				'routes' => [
 					'submit_package' => [
 						'title'    => esc_html__( 'Select Package', 'hivepress-paid-listings' ),
-						'path'     => '/submit-listing/package',
+						'path'     => '/submit-listing/package/?(?P<listing_package_id>\d+)?',
 						'redirect' => 'redirect_listing_submit_package_page',
 						'action'   => 'render_listing_submit_package_page',
 					],
@@ -69,14 +69,32 @@ class Listing_Package extends Controller {
 			return add_query_arg( 'redirect', rawurlencode( hp\get_current_url() ), User::get_url( 'login_user' ) );
 		}
 
+		// Get package ID.
+		$package_id = absint( get_query_var( 'hp_listing_package_id' ) );
+
 		// Check packages.
 		if ( hp\get_post_id(
 			[
 				'post_type'   => 'hp_listing_package',
 				'post_status' => 'publish',
+				'post__in'    => 0 === $package_id ? [] : [ $package_id ],
 			]
 		) === 0 ) {
 			return true;
+		}
+
+		// Get product ID.
+		$product_id = absint( wp_get_post_parent_id( $package_id ) );
+
+		if ( class_exists( 'WooCommerce' ) && 0 !== $product_id ) {
+
+			// Add product to cart.
+			WC()->cart->empty_cart();
+			WC()->cart->add_to_cart( $product_id );
+
+			return wc_get_page_permalink( 'checkout' );
+		} else {
+			// todo.
 		}
 
 		return false;

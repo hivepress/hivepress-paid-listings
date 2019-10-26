@@ -104,14 +104,10 @@ class Listing_Package_View_Block extends Template {
 								],
 
 								'blocks'     => [
-									'todo' => [
-										'type'       => 'form',
-										'form'       => 'listing_package_select',
-										'order'      => 10,
-
-										'attributes' => [
-											'class' => [ 'hp-form--narrow' ],
-										],
+									'listing_package_select_button' => [
+										'type'     => 'element',
+										'filepath' => 'listing-package/view/block/listing-package-select-button',
+										'order'    => 10,
 									],
 								],
 							],

@@ -38,14 +38,25 @@ class Listing_Packages extends Block {
 		// Query packages.
 		$query = new \WP_Query(
 			[
-				'post_type'   => 'hp_listing_package',
-				'post_status' => 'publish',
-				'orderby'     => 'menu_order',
-				'order'       => 'ASC',
+				'post_type'      => 'hp_listing_package',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'orderby'        => 'menu_order',
+				'order'          => 'ASC',
 			]
 		);
 
 		if ( $query->have_posts() ) {
+
+			// Get column width.
+			$columns      = absint( $query->found_posts );
+			$column_width = 3;
+
+			if ( $columns < 4 ) {
+				$column_width = round( 12 / $columns );
+			}
+
+			// Render packages.
 			$output  = '<div class="hp-grid hp-block">';
 			$output .= '<div class="hp-row">';
 
@@ -56,7 +67,7 @@ class Listing_Packages extends Block {
 				$listing_package = Models\Listing_Package::get( get_the_ID() );
 
 				if ( ! is_null( $listing_package ) ) {
-					$output .= '<div class="hp-grid__item hp-col-sm-4 hp-col-xs-12">';
+					$output .= '<div class="hp-grid__item hp-col-sm-' . esc_attr( $column_width ) . ' hp-col-xs-12">';
 
 					// Render package.
 					$output .= ( new Template(
