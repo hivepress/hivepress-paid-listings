@@ -1,0 +1,97 @@
+<?php
+/**
+ * Listing package controller.
+ *
+ * @package HivePress\Controllers
+ */
+
+namespace HivePress\Controllers;
+
+use HivePress\Helpers as hp;
+use HivePress\Blocks;
+
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Listing package controller class.
+ *
+ * @class Listing_Package
+ */
+class Listing_Package extends Controller {
+
+	/**
+	 * Controller name.
+	 *
+	 * @var string
+	 */
+	protected static $name;
+
+	/**
+	 * Controller routes.
+	 *
+	 * @var array
+	 */
+	protected static $routes = [];
+
+	/**
+	 * Class initializer.
+	 *
+	 * @param array $args Controller arguments.
+	 */
+	public static function init( $args = [] ) {
+		$args = hp\merge_arrays(
+			[
+				'routes' => [
+					'submit_package' => [
+						'title'    => esc_html__( 'Select Package', 'hivepress-paid-listings' ),
+						'path'     => '/submit-listing/package',
+						'redirect' => 'redirect_listing_submit_package_page',
+						'action'   => 'render_listing_submit_package_page',
+					],
+				],
+			],
+			$args
+		);
+
+		parent::init( $args );
+	}
+
+	/**
+	 * Redirects listing submit package page.
+	 *
+	 * @return mixed
+	 */
+	public function redirect_listing_submit_package_page() {
+
+		// Check authentication.
+		if ( ! is_user_logged_in() ) {
+			return add_query_arg( 'redirect', rawurlencode( hp\get_current_url() ), User::get_url( 'login_user' ) );
+		}
+
+		// Check packages.
+		if ( hp\get_post_id(
+			[
+				'post_type'   => 'hp_listing_package',
+				'post_status' => 'publish',
+			]
+		) === 0 ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Renders listing submit package page.
+	 *
+	 * @return string
+	 */
+	public function render_listing_submit_package_page() {
+		return ( new Blocks\Template(
+			[
+				'template' => 'listing_submit_package_page',
+			]
+		) )->render();
+	}
+}

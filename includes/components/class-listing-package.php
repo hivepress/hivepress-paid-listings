@@ -31,6 +31,10 @@ final class Listing_Package {
 
 			// Filter meta fields.
 			add_filter( 'hivepress/v1/meta_boxes/listing_package_settings', [ $this, 'filter_meta_fields' ] );
+		} else {
+
+			// Add menu items.
+			add_filter( 'hivepress/v1/menus/listing_submit', [ $this, 'add_menu_items' ] );
 		}
 	}
 
@@ -78,6 +82,26 @@ final class Listing_Package {
 				'fields' => [
 					'product' => [
 						'value' => $this->get_product_id( get_the_ID() ),
+					],
+				],
+			]
+		);
+	}
+
+	/**
+	 * Adds menu items.
+	 *
+	 * @param array $menu Menu arguments.
+	 * @return array
+	 */
+	public function add_menu_items( $menu ) {
+		return hp\merge_arrays(
+			$menu,
+			[
+				'items' => [
+					'submit_package' => [
+						'route' => 'listing_package/submit_package',
+						'order' => 35,
 					],
 				],
 			]

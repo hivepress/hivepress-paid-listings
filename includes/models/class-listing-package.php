@@ -49,15 +49,21 @@ class Listing_Package extends Post {
 		$args = hp\merge_arrays(
 			[
 				'fields'  => [
-					'title' => [
+					'name'        => [
 						'type'       => 'text',
 						'max_length' => 128,
 						'required'   => true,
 					],
+
+					'description' => [
+						'type'       => 'textarea',
+						'max_length' => 2048,
+					],
 				],
 
 				'aliases' => [
-					'post_title' => 'title',
+					'post_title'   => 'name',
+					'post_content' => 'description',
 				],
 			],
 			$args
