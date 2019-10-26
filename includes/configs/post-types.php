@@ -15,7 +15,7 @@ return [
 		'public'       => false,
 		'show_ui'      => true,
 		'show_in_menu' => 'edit.php?post_type=hp_listing',
-		'supports'     => [ 'title' ],
+		'supports'     => [ 'title', 'page-attributes' ],
 
 		'labels'       => [
 			'name'               => esc_html__( 'Packages', 'hivepress-paid-listings' ),
