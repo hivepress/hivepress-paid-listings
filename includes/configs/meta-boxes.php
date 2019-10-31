@@ -16,18 +16,20 @@ return [
 		'screen' => 'listing_package',
 
 		'fields' => [
-			'product'       => [
-				'label'     => esc_html__( 'WooCommerce Product', 'hivepress-paid-listings' ),
-				'type'      => 'select',
-				'options'   => 'posts',
-				'post_type' => 'product',
-				'order'     => 10,
+			'product'          => [
+				'label'       => esc_html__( 'WooCommerce Product', 'hivepress-paid-listings' ),
+				'description' => esc_html__( 'Choose a WooCommerce product that must be purchased in order to get this package.', 'hivepress-paid-listings' ),
+				'type'        => 'select',
+				'options'     => 'posts',
+				'post_type'   => 'product',
+				'order'       => 10,
 			],
 
-			'listing_limit' => [
+			'submission_limit' => [
 				'label'     => esc_html__( 'Listing Limit', 'hivepress-paid-listings' ),
 				'type'      => 'number',
 				'min_value' => 1,
+				'required'  => true,
 				'order'     => 20,
 			],
 		],

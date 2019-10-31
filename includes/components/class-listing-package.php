@@ -37,6 +37,9 @@ final class Listing_Package {
 			add_action( 'template_redirect', [ $this, 'redirect_order_page' ] );
 		}
 
+		// Update user packages.
+		add_action( 'transition_post_status', [ $this, 'update_user_packages' ], 10, 3 );
+
 		// Delete user packages.
 		add_action( 'delete_user', [ $this, 'delete_user_packages' ] );
 
@@ -130,18 +133,19 @@ final class Listing_Package {
 					if ( in_array( $new_status, [ 'processing', 'completed' ], true ) ) {
 
 						// Get user package IDs.
-						$user_package_ids = wp_list_pluck( $user_packages, 'comment_post_ID' );
+						$user_package_ids = array_map( 'absint', wp_list_pluck( $user_packages, 'comment_post_ID' ) );
 
 						// Add packages.
 						foreach ( $package_ids as $package_id ) {
 							if ( ! in_array( $package_id, $user_package_ids, true ) ) {
 								wp_insert_comment(
 									[
-										'comment_type'    => 'hp_listing_package',
-										'comment_post_ID' => $package_id,
-										'user_id'         => $order->get_user_id(),
-										'comment_karma'   => absint( get_post_meta( $package_id, 'hp_listing_limit', true ) ),
-										'comment_content' => get_the_title( $package_id ),
+										'comment_type'     => 'hp_listing_package',
+										'comment_approved' => 0,
+										'comment_post_ID'  => $package_id,
+										'user_id'          => $order->get_user_id(),
+										'comment_karma'    => absint( get_post_meta( $package_id, 'hp_submission_limit', true ) ),
+										'comment_content'  => get_the_title( $package_id ),
 									]
 								);
 							}
@@ -189,6 +193,64 @@ final class Listing_Package {
 						wp_safe_redirect( Controllers\Listing_Package::get_url( 'submit_package' ) );
 
 						exit();
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Updates user packages.
+	 *
+	 * @param string  $new_status New status.
+	 * @param string  $old_status Old status.
+	 * @param WP_Post $listing Listing object.
+	 */
+	public function update_user_packages( $new_status, $old_status, $listing ) {
+		if ( 'hp_listing' === $listing->post_type && $new_status !== $old_status && 'auto-draft' === $old_status ) {
+
+			// Get user packages.
+			$user_packages = wp_list_sort(
+				get_comments(
+					[
+						'type'    => 'hp_listing_package',
+						'user_id' => $listing->post_author,
+					]
+				),
+				'comment_karma',
+				'DESC'
+			);
+
+			if ( ! empty( $user_packages ) ) {
+
+				// Get user package.
+				$user_package = reset( $user_packages );
+
+				// Update user package.
+				if ( $user_package->comment_karma > 1 ) {
+					wp_update_comment(
+						[
+							'comment_ID'    => $user_package->comment_ID,
+							'comment_karma' => $user_package->comment_karma - 1,
+						]
+					);
+				} else {
+					if ( ! $user_package->comment_approved ) {
+						wp_delete_comment( $user_package->comment_ID, true );
+					} elseif ( $user_package->comment_karma > 0 ) {
+						wp_update_comment(
+							[
+								'comment_ID'    => $user_package->comment_ID,
+								'comment_karma' => 0,
+							]
+						);
+					}
+				}
+
+				// Delete user packages.
+				foreach ( $user_packages as $user_package ) {
+					if ( ! $user_package->comment_approved && $user_package->comment_karma <= 0 ) {
+						wp_delete_comment( $user_package->comment_ID, true );
 					}
 				}
 			}
@@ -245,7 +307,13 @@ final class Listing_Package {
 			[
 				'fields' => [
 					'product' => [
-						'value' => $this->get_package_product_id( get_the_ID() ),
+						'value' => hp\get_post_id(
+							[
+								'post_type'   => 'product',
+								'post_status' => 'publish',
+								'post__in'    => [ absint( wp_get_post_parent_id( get_the_ID() ) ) ],
+							]
+						),
 					],
 				],
 			]
@@ -268,22 +336,6 @@ final class Listing_Package {
 						'order' => 35,
 					],
 				],
-			]
-		);
-	}
-
-	/**
-	 * Gets package product ID.
-	 *
-	 * @param int $package_id Package ID.
-	 * @return int
-	 */
-	protected function get_package_product_id( $package_id ) {
-		return hp\get_post_id(
-			[
-				'post_type'   => 'product',
-				'post_status' => 'publish',
-				'post__in'    => [ absint( wp_get_post_parent_id( $package_id ) ) ],
 			]
 		);
 	}

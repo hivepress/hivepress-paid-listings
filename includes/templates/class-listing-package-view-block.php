@@ -71,7 +71,7 @@ class Listing_Package_View_Block extends Template {
 
 									'listing_package_price' => [
 										'type'     => 'element',
-										'filepath' => 'listing-package/view/block/listing-package-price',
+										'filepath' => 'listing-package/view/listing-package-price',
 										'order'    => 20,
 									],
 								],
@@ -88,7 +88,7 @@ class Listing_Package_View_Block extends Template {
 								'blocks'     => [
 									'listing_package_description' => [
 										'type'     => 'element',
-										'filepath' => 'listing-package/view/block/listing-package-description',
+										'filepath' => 'listing-package/view/listing-package-description',
 										'order'    => 10,
 									],
 								],
@@ -106,7 +106,7 @@ class Listing_Package_View_Block extends Template {
 								'blocks'     => [
 									'listing_package_select_button' => [
 										'type'     => 'element',
-										'filepath' => 'listing-package/view/block/listing-package-select-button',
+										'filepath' => 'listing-package/view/listing-package-select-button',
 										'order'    => 10,
 									],
 								],

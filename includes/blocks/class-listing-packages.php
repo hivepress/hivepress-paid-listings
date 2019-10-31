@@ -64,10 +64,17 @@ class Listing_Packages extends Block {
 				$query->the_post();
 
 				// Get package.
-				$listing_package = Models\Listing_Package::get( get_the_ID() );
+				$package = Models\Listing_Package::get( get_the_ID() );
 
-				if ( ! is_null( $listing_package ) ) {
+				if ( ! is_null( $package ) ) {
 					$output .= '<div class="hp-grid__item hp-col-sm-' . esc_attr( $column_width ) . ' hp-col-xs-12">';
+
+					// Get product.
+					$product = null;
+
+					if ( class_exists( 'WooCommerce' ) && $package->get_product_id() !== 0 ) {
+						$product = wc_get_product( $package->get_product_id() );
+					}
 
 					// Render package.
 					$output .= ( new Template(
@@ -75,7 +82,8 @@ class Listing_Packages extends Block {
 							'template' => 'listing_package_view_block',
 
 							'context'  => [
-								'listing_package' => $listing_package,
+								'listing_package' => $package,
+								'product'         => $product,
 							],
 						]
 					) )->render();
