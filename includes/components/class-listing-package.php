@@ -37,10 +37,13 @@ final class Listing_Package {
 			add_action( 'template_redirect', [ $this, 'redirect_order_page' ] );
 		}
 
+		// Delete user packages.
+		add_action( 'delete_user', [ $this, 'delete_user_packages' ] );
+
 		if ( is_admin() ) {
 
-			// Hide package todos.
-			add_filter( 'comments_clauses', [ $this, 'hide_package_todos' ] );
+			// Hide user packages.
+			add_filter( 'comments_clauses', [ $this, 'hide_user_packages' ] );
 
 			// Filter meta fields.
 			add_filter( 'hivepress/v1/meta_boxes/listing_package_settings', [ $this, 'filter_meta_fields' ] );
@@ -92,14 +95,65 @@ final class Listing_Package {
 	 */
 	public function update_order_status( $order_id, $old_status, $new_status, $order ) {
 
-		// Get product IDs.
-		$product_ids = $this->get_package_product_ids();
+		// Get package product IDs.
+		$package_product_ids = $this->get_package_product_ids();
 
-		if ( ! empty( $product_ids ) && count( array_intersect( $product_ids, $this->get_order_product_ids( $order ) ) ) > 0 ) {
-			if ( in_array( $new_status, [ 'processing', 'completed' ], true ) ) {
-				// todo add package.
-			} elseif ( in_array( $new_status, [ 'failed', 'cancelled', 'refunded' ], true ) ) {
-				// todo remove package.
+		if ( ! empty( $package_product_ids ) ) {
+
+			// Get order product IDs.
+			$order_product_ids = array_intersect( $package_product_ids, $this->get_order_product_ids( $order ) );
+
+			if ( ! empty( $order_product_ids ) ) {
+
+				// Get package IDs.
+				$package_ids = get_posts(
+					[
+						'post_type'       => 'hp_listing_package',
+						'post_status'     => 'publish',
+						'post_parent__in' => $order_product_ids,
+						'posts_per_page'  => -1,
+						'fields'          => 'ids',
+					]
+				);
+
+				if ( ! empty( $package_ids ) ) {
+
+					// Get user packages.
+					$user_packages = get_comments(
+						[
+							'type'     => 'hp_listing_package',
+							'user_id'  => $order->get_user_id(),
+							'post__in' => $package_ids,
+						]
+					);
+
+					if ( in_array( $new_status, [ 'processing', 'completed' ], true ) ) {
+
+						// Get user package IDs.
+						$user_package_ids = wp_list_pluck( $user_packages, 'comment_post_ID' );
+
+						// Add packages.
+						foreach ( $package_ids as $package_id ) {
+							if ( ! in_array( $package_id, $user_package_ids, true ) ) {
+								wp_insert_comment(
+									[
+										'comment_type'    => 'hp_listing_package',
+										'comment_post_ID' => $package_id,
+										'user_id'         => $order->get_user_id(),
+										'comment_karma'   => absint( get_post_meta( $package_id, 'hp_listing_limit', true ) ),
+										'comment_content' => get_the_title( $package_id ),
+									]
+								);
+							}
+						}
+					} elseif ( in_array( $new_status, [ 'failed', 'cancelled', 'refunded' ], true ) ) {
+
+						// Delete packages.
+						foreach ( $user_packages as $user_package ) {
+							wp_delete_comment( $user_package->comment_ID, true );
+						}
+					}
+				}
 			}
 		}
 	}
@@ -142,16 +196,38 @@ final class Listing_Package {
 	}
 
 	/**
-	 * Hides package todos.
+	 * Deletes user packages.
+	 *
+	 * @param int $user_id User ID.
+	 */
+	public function delete_user_packages( $user_id ) {
+
+		// Get package IDs.
+		$package_ids = get_comments(
+			[
+				'type'    => 'hp_listing_package',
+				'user_id' => $user_id,
+				'fields'  => 'ids',
+			]
+		);
+
+		// Delete packages.
+		foreach ( $package_ids as $package_id ) {
+			wp_delete_comment( $package_id, true );
+		}
+	}
+
+	/**
+	 * Hides user packages.
 	 *
 	 * @param array $query Query arguments.
 	 * @return array
 	 */
-	public function hide_package_todos( $query ) {
+	public function hide_user_packages( $query ) {
 		global $pagenow;
 
 		if ( in_array( $pagenow, [ 'index.php', 'edit-comments.php' ], true ) ) {
-			$query['where'] .= ' AND comment_type != "hp_package_todo"';
+			$query['where'] .= ' AND comment_type != "hp_listing_package"';
 		}
 
 		return $query;

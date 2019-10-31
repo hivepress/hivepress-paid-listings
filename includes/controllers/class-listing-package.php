@@ -93,8 +93,28 @@ class Listing_Package extends Controller {
 			WC()->cart->add_to_cart( $product_id );
 
 			return wc_get_page_permalink( 'checkout' );
-		} else {
-			// todo.
+		} elseif ( count(
+			get_comments(
+				[
+					'type'    => 'hp_listing_package',
+					'post_id' => $package_id,
+					'user_id' => get_current_user_id(),
+					'number'  => 1,
+					'fields'  => 'ids',
+				]
+			)
+		) === 0 ) {
+			wp_insert_comment(
+				[
+					'comment_type'    => 'hp_listing_package',
+					'comment_post_ID' => $package_id,
+					'user_id'         => $order->get_user_id(),
+					'comment_karma'   => absint( get_post_meta( $package_id, 'hp_listing_limit', true ) ),
+					'comment_content' => get_the_title( $package_id ),
+				]
+			);
+
+			return true;
 		}
 
 		return false;
