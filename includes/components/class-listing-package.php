@@ -24,10 +24,6 @@ final class Listing_Package {
 	 * Class constructor.
 	 */
 	public function __construct() {
-
-		// Update package.
-		add_action( 'save_post', [ $this, 'update_package' ], 99, 2 );
-
 		if ( class_exists( 'WooCommerce' ) ) {
 
 			// Update order status.
@@ -54,37 +50,6 @@ final class Listing_Package {
 
 			// Add menu items.
 			add_filter( 'hivepress/v1/menus/listing_submit', [ $this, 'add_menu_items' ] );
-		}
-	}
-
-	/**
-	 * Updates package.
-	 *
-	 * @param int     $package_id Package ID.
-	 * @param WP_Post $package Package object.
-	 */
-	public function update_package( $package_id, $package ) {
-		if ( 'hp_listing_package' === $package->post_type ) {
-
-			// Remove action.
-			remove_action( 'save_post', [ $this, 'update_package' ], 99 );
-
-			// Set product ID.
-			$product_id = absint( get_post_meta( $package_id, 'hp_product', true ) );
-
-			if ( 0 !== $product_id ) {
-				if ( $package->post_parent !== $product_id ) {
-					wp_update_post(
-						[
-							'ID'          => $package_id,
-							'post_parent' => $product_id,
-						]
-					);
-				}
-
-				// Delete meta value.
-				delete_post_meta( $package_id, 'hp_product' );
-			}
 		}
 	}
 
