@@ -43,9 +43,6 @@ final class Listing_Package {
 
 			// Hide user packages.
 			add_filter( 'comments_clauses', [ $this, 'hide_user_packages' ] );
-
-			// Filter meta fields.
-			add_filter( 'hivepress/v1/meta_boxes/listing_package_settings', [ $this, 'filter_meta_fields' ] );
 		} else {
 
 			// Add menu items.
@@ -258,31 +255,6 @@ final class Listing_Package {
 		}
 
 		return $query;
-	}
-
-	/**
-	 * Filters meta fields.
-	 *
-	 * @param array $meta_box Meta box arguments.
-	 * @return array
-	 */
-	public function filter_meta_fields( $meta_box ) {
-		return hp\merge_arrays(
-			$meta_box,
-			[
-				'fields' => [
-					'product' => [
-						'value' => hp\get_post_id(
-							[
-								'post_type'   => 'product',
-								'post_status' => 'publish',
-								'post__in'    => [ absint( wp_get_post_parent_id( get_the_ID() ) ) ],
-							]
-						),
-					],
-				],
-			]
-		);
 	}
 
 	/**
