@@ -39,11 +39,7 @@ final class Listing_Package {
 		// Delete user packages.
 		add_action( 'delete_user', [ $this, 'delete_user_packages' ] );
 
-		if ( is_admin() ) {
-
-			// Hide user packages.
-			add_filter( 'comments_clauses', [ $this, 'hide_user_packages' ] );
-		} else {
+		if ( ! is_admin() ) {
 
 			// Add menu items.
 			add_filter( 'hivepress/v1/menus/listing_submit', [ $this, 'add_menu_items' ] );
@@ -239,22 +235,6 @@ final class Listing_Package {
 		foreach ( $package_ids as $package_id ) {
 			wp_delete_comment( $package_id, true );
 		}
-	}
-
-	/**
-	 * Hides user packages.
-	 *
-	 * @param array $query Query arguments.
-	 * @return array
-	 */
-	public function hide_user_packages( $query ) {
-		global $pagenow;
-
-		if ( in_array( $pagenow, [ 'index.php', 'edit-comments.php' ], true ) ) {
-			$query['where'] .= ' AND comment_type != "hp_listing_package"';
-		}
-
-		return $query;
 	}
 
 	/**
