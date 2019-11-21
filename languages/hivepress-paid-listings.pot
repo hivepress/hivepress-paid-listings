@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HivePress Paid Listings\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-20 18:08+0000\n"
+"POT-Creation-Date: 2019-11-21 11:31+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -46,6 +46,18 @@ msgstr ""
 
 #: includes/configs/post-types.php:29 includes/configs/post-types.php:30
 msgid "No Packages Found"
+msgstr ""
+
+#: includes/configs/strings.php:14
+msgid "Listing Limit"
+msgstr ""
+
+#: includes/configs/strings.php:15
+msgid "Limit Exceeded"
+msgstr ""
+
+#: includes/configs/strings.php:16
+msgid "Set the maximum number of listing submissions."
 msgstr ""
 
 #: includes/controllers/class-listing-package.php:47

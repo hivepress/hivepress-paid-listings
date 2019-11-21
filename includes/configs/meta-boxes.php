@@ -36,7 +36,7 @@ return [
 
 			'expiration_period' => [
 				'label'       => hivepress()->translator->get_string( 'listing_expiration' ),
-				'description' => hivepress()->translator->get_string( 'set_number_of_days_after_which_listing_expires' ),
+				'description' => hivepress()->translator->get_string( 'set_number_of_days_until_listing_expires' ),
 				'type'        => 'number',
 				'min_value'   => 1,
 				'order'       => 30,
