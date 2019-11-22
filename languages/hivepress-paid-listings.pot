@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HivePress Paid Listings\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-21 18:57+0000\n"
+"POT-Creation-Date: 2019-11-22 22:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -20,7 +20,6 @@ msgid "Choose a product that must be purchased in order to get this package."
 msgstr ""
 
 #: includes/configs/post-types.php:21 includes/configs/post-types.php:27
-#: includes/controllers/class-user-listing-package.php:47
 msgid "Packages"
 msgstr ""
 
@@ -33,7 +32,7 @@ msgid "Add Package"
 msgstr ""
 
 #: includes/configs/post-types.php:24
-msgctxt "listing package"
+msgctxt "package"
 msgid "Add New"
 msgstr ""
 

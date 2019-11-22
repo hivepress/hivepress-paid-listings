@@ -21,7 +21,7 @@ return [
 			'name'               => esc_html__( 'Packages', 'hivepress-paid-listings' ),
 			'singular_name'      => esc_html__( 'Package', 'hivepress-paid-listings' ),
 			'add_new_item'       => esc_html__( 'Add Package', 'hivepress-paid-listings' ),
-			'add_new'            => esc_html_x( 'Add New', 'listing package', 'hivepress-paid-listings' ),
+			'add_new'            => esc_html_x( 'Add New', 'package', 'hivepress-paid-listings' ),
 			'edit_item'          => esc_html__( 'Edit Package', 'hivepress-paid-listings' ),
 			'new_item'           => esc_html__( 'Add Package', 'hivepress-paid-listings' ),
 			'all_items'          => esc_html__( 'Packages', 'hivepress-paid-listings' ),

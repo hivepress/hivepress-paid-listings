@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HivePress Paid Listings\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-21 18:57+0000\n"
-"PO-Revision-Date: 2019-11-21 23:35+0000\n"
+"POT-Creation-Date: 2019-11-22 22:40+0000\n"
+"PO-Revision-Date: 2019-11-22 22:48+0000\n"
 "Last-Translator: admin <admin@admin.com>\n"
 "Language-Team: Русский\n"
 "Language: ru_RU\n"
@@ -20,7 +20,6 @@ msgid "Choose a product that must be purchased in order to get this package."
 msgstr "Выберите продукт, который должен быть куплен для получения пакета."
 
 #: includes/configs/post-types.php:21 includes/configs/post-types.php:27
-#: includes/controllers/class-user-listing-package.php:47
 msgid "Packages"
 msgstr "Пакеты"
 
@@ -33,7 +32,7 @@ msgid "Add Package"
 msgstr "Добавить пакет"
 
 #: includes/configs/post-types.php:24
-msgctxt "listing package"
+msgctxt "package"
 msgid "Add New"
 msgstr "Добавить новый"
 
@@ -51,7 +50,7 @@ msgstr "Пакетов не найдено."
 
 #: includes/configs/strings.php:14
 msgid "Listing Limit"
-msgstr "Лимит позиций"
+msgstr "Лимит объявлений"
 
 #: includes/configs/strings.php:15
 msgid "Limit Exceeded"
@@ -59,7 +58,7 @@ msgstr "Лимит превышен"
 
 #: includes/configs/strings.php:16
 msgid "Set the maximum number of listing submissions."
-msgstr "Введите максимальное количество позиций для добавления."
+msgstr "Введите максимальное количество объявлений для добавления."
 
 #: includes/controllers/class-listing-package.php:47
 #: templates/listing-package/view/listing-package-select-button.php:17
@@ -72,16 +71,16 @@ msgstr "Купить пакет"
 
 #. Name of the plugin
 msgid "HivePress Paid Listings"
-msgstr "HivePress Платные позиции"
+msgstr "HivePress Платные объявления"
 
 #. Description of the plugin
 msgid "Charge users for adding listings."
-msgstr "Берите с пользователей плату за добавление позиций."
+msgstr "Берите с пользователей плату за добавление объявлений."
 
 #. Author of the plugin
 msgid "HivePress"
-msgstr ""
+msgstr "HivePress"
 
 #. Author URI of the plugin
 msgid "https://hivepress.io/"
-msgstr ""
+msgstr "https://hivepress.io/"

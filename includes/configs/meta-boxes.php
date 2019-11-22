@@ -43,7 +43,7 @@ return [
 			],
 
 			'featured'          => [
-				'label'   => hivepress()->translator->get_string( 'featured_listings' ),
+				'label'   => hivepress()->translator->get_string( 'featuring_of_listings' ),
 				'caption' => hivepress()->translator->get_string( 'make_listings_featured' ),
 				'type'    => 'checkbox',
 				'order'   => 40,
