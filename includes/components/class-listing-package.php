@@ -24,6 +24,16 @@ final class Listing_Package {
 	 * Class constructor.
 	 */
 	public function __construct() {
+
+		// Upgrade user packages.
+		add_action( 'hivepress/v1/update', [ $this, 'upgrade_user_packages' ] );
+
+		// Update user packages.
+		add_action( 'hivepress/v1/models/listing/update_status', [ $this, 'update_user_packages' ], 10, 3 );
+
+		// Delete user packages.
+		add_action( 'hivepress/v1/models/user/delete', [ $this, 'delete_user_packages' ] );
+
 		if ( class_exists( 'WooCommerce' ) ) {
 
 			// Update order status.
@@ -33,16 +43,105 @@ final class Listing_Package {
 			add_action( 'template_redirect', [ $this, 'redirect_order_page' ] );
 		}
 
-		// Update user packages.
-		add_action( 'hivepress/v1/models/listing/update_status', [ $this, 'update_user_packages' ], 10, 3 );
-
-		// Delete user packages.
-		add_action( 'hivepress/v1/models/user/delete', [ $this, 'delete_user_packages' ] );
-
 		if ( ! is_admin() ) {
 
 			// Add menu items.
 			add_filter( 'hivepress/v1/menus/listing_submit', [ $this, 'add_menu_items' ] );
+		}
+	}
+
+	/**
+	 * Upgrades user packages.
+	 *
+	 * @deprecated
+	 */
+	public function upgrade_user_packages() {
+		global $wpdb;
+
+		// Update type.
+		$wpdb->query( "UPDATE $wpdb->comments SET comment_type = 'hp_user_listing_package' WHERE comment_type = 'hp_listing_package';" );
+	}
+
+	/**
+	 * Updates user packages.
+	 *
+	 * @param int    $listing_id Listing ID.
+	 * @param string $new_status New status.
+	 * @param string $old_status Old status.
+	 */
+	public function update_user_packages( $listing_id, $new_status, $old_status ) {
+		if ( 'auto-draft' === $old_status ) {
+
+			// Get listing.
+			$listing = get_post( $listing_id );
+
+			// Get user packages.
+			$user_packages = wp_list_sort(
+				get_comments(
+					[
+						'type'    => 'hp_user_listing_package',
+						'user_id' => $listing->post_author,
+					]
+				),
+				'comment_karma',
+				'DESC'
+			);
+
+			if ( ! empty( $user_packages ) ) {
+
+				// Get user package.
+				$user_package = reset( $user_packages );
+
+				// Update user package.
+				if ( $user_package->comment_karma > 1 ) {
+					wp_update_comment(
+						[
+							'comment_ID'    => $user_package->comment_ID,
+							'comment_karma' => $user_package->comment_karma - 1,
+						]
+					);
+				} else {
+					if ( ! $user_package->comment_approved ) {
+						wp_delete_comment( $user_package->comment_ID, true );
+					} elseif ( $user_package->comment_karma > 0 ) {
+						wp_update_comment(
+							[
+								'comment_ID'    => $user_package->comment_ID,
+								'comment_karma' => 0,
+							]
+						);
+					}
+				}
+
+				// Delete user packages.
+				foreach ( $user_packages as $user_package ) {
+					if ( ! $user_package->comment_approved && $user_package->comment_karma <= 0 ) {
+						wp_delete_comment( $user_package->comment_ID, true );
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Deletes user packages.
+	 *
+	 * @param int $user_id User ID.
+	 */
+	public function delete_user_packages( $user_id ) {
+
+		// Get package IDs.
+		$package_ids = get_comments(
+			[
+				'type'    => 'hp_user_listing_package',
+				'user_id' => $user_id,
+				'fields'  => 'ids',
+			]
+		);
+
+		// Delete packages.
+		foreach ( $package_ids as $package_id ) {
+			wp_delete_comment( $package_id, true );
 		}
 	}
 
@@ -154,89 +253,6 @@ final class Listing_Package {
 					}
 				}
 			}
-		}
-	}
-
-	/**
-	 * Updates user packages.
-	 *
-	 * @param int    $listing_id Listing ID.
-	 * @param string $new_status New status.
-	 * @param string $old_status Old status.
-	 */
-	public function update_user_packages( $listing_id, $new_status, $old_status ) {
-		if ( 'auto-draft' === $old_status ) {
-
-			// Get listing.
-			$listing = get_post( $listing_id );
-
-			// Get user packages.
-			$user_packages = wp_list_sort(
-				get_comments(
-					[
-						'type'    => 'hp_user_listing_package',
-						'user_id' => $listing->post_author,
-					]
-				),
-				'comment_karma',
-				'DESC'
-			);
-
-			if ( ! empty( $user_packages ) ) {
-
-				// Get user package.
-				$user_package = reset( $user_packages );
-
-				// Update user package.
-				if ( $user_package->comment_karma > 1 ) {
-					wp_update_comment(
-						[
-							'comment_ID'    => $user_package->comment_ID,
-							'comment_karma' => $user_package->comment_karma - 1,
-						]
-					);
-				} else {
-					if ( ! $user_package->comment_approved ) {
-						wp_delete_comment( $user_package->comment_ID, true );
-					} elseif ( $user_package->comment_karma > 0 ) {
-						wp_update_comment(
-							[
-								'comment_ID'    => $user_package->comment_ID,
-								'comment_karma' => 0,
-							]
-						);
-					}
-				}
-
-				// Delete user packages.
-				foreach ( $user_packages as $user_package ) {
-					if ( ! $user_package->comment_approved && $user_package->comment_karma <= 0 ) {
-						wp_delete_comment( $user_package->comment_ID, true );
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Deletes user packages.
-	 *
-	 * @param int $user_id User ID.
-	 */
-	public function delete_user_packages( $user_id ) {
-
-		// Get package IDs.
-		$package_ids = get_comments(
-			[
-				'type'    => 'hp_user_listing_package',
-				'user_id' => $user_id,
-				'fields'  => 'ids',
-			]
-		);
-
-		// Delete packages.
-		foreach ( $package_ids as $package_id ) {
-			wp_delete_comment( $package_id, true );
 		}
 	}
 
