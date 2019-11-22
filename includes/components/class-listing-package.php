@@ -82,7 +82,7 @@ final class Listing_Package {
 					// Get user packages.
 					$user_packages = get_comments(
 						[
-							'type'     => 'hp_listing_package',
+							'type'     => 'hp_user_listing_package',
 							'user_id'  => $order->get_user_id(),
 							'post__in' => $package_ids,
 						]
@@ -98,7 +98,7 @@ final class Listing_Package {
 							if ( ! in_array( $package_id, $user_package_ids, true ) ) {
 								wp_insert_comment(
 									[
-										'comment_type'     => 'hp_listing_package',
+										'comment_type'     => 'hp_user_listing_package',
 										'comment_approved' => 0,
 										'comment_post_ID'  => $package_id,
 										'user_id'          => $order->get_user_id(),
@@ -171,7 +171,7 @@ final class Listing_Package {
 			$user_packages = wp_list_sort(
 				get_comments(
 					[
-						'type'    => 'hp_listing_package',
+						'type'    => 'hp_user_listing_package',
 						'user_id' => $listing->post_author,
 					]
 				),
@@ -225,7 +225,7 @@ final class Listing_Package {
 		// Get package IDs.
 		$package_ids = get_comments(
 			[
-				'type'    => 'hp_listing_package',
+				'type'    => 'hp_user_listing_package',
 				'user_id' => $user_id,
 				'fields'  => 'ids',
 			]
