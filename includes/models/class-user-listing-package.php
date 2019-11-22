@@ -1,6 +1,6 @@
 <?php
 /**
- * Listing package model.
+ * User listing package model.
  *
  * @package HivePress\Models
  */
@@ -13,11 +13,11 @@ use HivePress\Helpers as hp;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Listing package model class.
+ * User listing package model class.
  *
- * @class Listing_Package
+ * @class User_Listing_Package
  */
-class Listing_Package extends Post {
+class User_Listing_Package extends Comment {
 
 	/**
 	 * Model name.
@@ -49,27 +49,22 @@ class Listing_Package extends Post {
 		$args = hp\merge_arrays(
 			[
 				'fields'  => [
-					'name'        => [
-						'type'       => 'text',
-						'max_length' => 128,
-						'required'   => true,
-					],
-
-					'description' => [
-						'type'       => 'textarea',
-						'max_length' => 2048,
-					],
-
-					'product_id'  => [
+					'user_id'    => [
 						'type'      => 'number',
 						'min_value' => 1,
+						'required'  => true,
+					],
+
+					'package_id' => [
+						'type'      => 'number',
+						'min_value' => 1,
+						'required'  => true,
 					],
 				],
 
 				'aliases' => [
-					'post_title'   => 'name',
-					'post_content' => 'description',
-					'post_parent'  => 'product_id',
+					'user_id'         => 'user_id',
+					'comment_post_ID' => 'package_id',
 				],
 			],
 			$args
