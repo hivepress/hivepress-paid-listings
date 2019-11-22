@@ -74,7 +74,7 @@ class Listing_Package extends Controller {
 			wp_list_pluck(
 				get_comments(
 					[
-						'type'    => 'hp_listing_package',
+						'type'    => 'hp_user_listing_package',
 						'user_id' => get_current_user_id(),
 					]
 				),
@@ -123,7 +123,7 @@ class Listing_Package extends Controller {
 			) === 0 ) {
 				wp_insert_comment(
 					[
-						'comment_type'     => 'hp_listing_package',
+						'comment_type'     => 'hp_user_listing_package',
 						'comment_approved' => 1,
 						'comment_post_ID'  => $package_id,
 						'user_id'          => get_current_user_id(),

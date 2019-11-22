@@ -34,10 +34,10 @@ final class Listing_Package {
 		}
 
 		// Update user packages.
-		add_action( 'transition_post_status', [ $this, 'update_user_packages' ], 10, 3 );
+		add_action( 'hivepress/v1/models/listing/update_status', [ $this, 'update_user_packages' ], 10, 3 );
 
 		// Delete user packages.
-		add_action( 'delete_user', [ $this, 'delete_user_packages' ] );
+		add_action( 'hivepress/v1/models/user/delete', [ $this, 'delete_user_packages' ] );
 
 		if ( ! is_admin() ) {
 
@@ -160,12 +160,15 @@ final class Listing_Package {
 	/**
 	 * Updates user packages.
 	 *
-	 * @param string  $new_status New status.
-	 * @param string  $old_status Old status.
-	 * @param WP_Post $listing Listing object.
+	 * @param int    $listing_id Listing ID.
+	 * @param string $new_status New status.
+	 * @param string $old_status Old status.
 	 */
-	public function update_user_packages( $new_status, $old_status, $listing ) {
-		if ( 'hp_listing' === $listing->post_type && $new_status !== $old_status && 'auto-draft' === $old_status ) {
+	public function update_user_packages( $listing_id, $new_status, $old_status ) {
+		if ( 'auto-draft' === $old_status ) {
+
+			// Get listing.
+			$listing = get_post( $listing_id );
 
 			// Get user packages.
 			$user_packages = wp_list_sort(
