@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HivePress Paid Listings\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-31 20:16+0000\n"
+"POT-Creation-Date: 2019-11-24 18:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -15,12 +15,12 @@ msgstr ""
 "X-Generator: Loco https://localise.biz/\n"
 "X-Loco-Version: 2.3.1; wp-5.2.4"
 
-#: includes/configs/post-types.php:23
-msgid "Add New Package"
+#: includes/configs/meta-boxes.php:15
+msgid "Settings"
 msgstr ""
 
-#: templates/listing-package/view/listing-package-select-button.php:17
-msgid "Buy Package"
+#: includes/configs/meta-boxes.php:20
+msgid "WooCommerce Product"
 msgstr ""
 
 #: includes/configs/meta-boxes.php:21
@@ -29,36 +29,52 @@ msgid ""
 "package."
 msgstr ""
 
-#: includes/configs/post-types.php:24
-msgid "Edit Package"
-msgstr ""
-
-#: templates/listing-package/view/listing-package-price.php:5
-msgid "Free"
-msgstr ""
-
-#. Author of the plugin
-msgid "HivePress"
-msgstr ""
-
-#. Name of the plugin
-msgid "HivePress Paid Listings"
-msgstr ""
-
-#. Author URI of the plugin
-msgid "https://hivepress.io/"
-msgstr ""
-
-#: templates/listing-package/view/listing-package-select-button.php:15
-msgid "Limit Exceeded"
-msgstr ""
-
 #: includes/configs/meta-boxes.php:29
 msgid "Listing Limit"
 msgstr ""
 
+#: includes/configs/meta-boxes.php:37
+msgid "Listing Expiration"
+msgstr ""
+
+#: includes/configs/meta-boxes.php:38
+msgid "Set the number of days after which a listing expires."
+msgstr ""
+
+#: includes/configs/meta-boxes.php:45
+msgid "Featured Listings"
+msgstr ""
+
+#: includes/configs/meta-boxes.php:46
+msgid "Make listings featured"
+msgstr ""
+
+#: includes/configs/post-types.php:21 includes/configs/post-types.php:27
+msgid "Packages"
+msgstr ""
+
+#: includes/configs/post-types.php:22
+msgid "Package"
+msgstr ""
+
+#: includes/configs/post-types.php:23
+msgid "Add New Package"
+msgstr ""
+
+#: includes/configs/post-types.php:24
+msgid "Edit Package"
+msgstr ""
+
 #: includes/configs/post-types.php:25
 msgid "New Package"
+msgstr ""
+
+#: includes/configs/post-types.php:26
+msgid "View Package"
+msgstr ""
+
+#: includes/configs/post-types.php:28
+msgid "Search Packages"
 msgstr ""
 
 #: includes/configs/post-types.php:29
@@ -69,35 +85,35 @@ msgstr ""
 msgid "No Packages Found in Trash"
 msgstr ""
 
-#: includes/configs/post-types.php:22
-msgid "Package"
-msgstr ""
-
-#: includes/configs/post-types.php:21 includes/configs/post-types.php:27
-msgid "Packages"
-msgstr ""
-
-#. Description of the plugin
-msgid "Paid listings extension for HivePress plugin."
-msgstr ""
-
-#: includes/configs/post-types.php:28
-msgid "Search Packages"
-msgstr ""
-
 #: includes/controllers/class-listing-package.php:47
 #: templates/listing-package/view/listing-package-select-button.php:17
 msgid "Select Package"
 msgstr ""
 
-#: includes/configs/meta-boxes.php:15
-msgid "Settings"
+#: templates/listing-package/view/listing-package-price.php:5
+msgid "Free"
 msgstr ""
 
-#: includes/configs/post-types.php:26
-msgid "View Package"
+#: templates/listing-package/view/listing-package-select-button.php:15
+msgid "Limit Exceeded"
 msgstr ""
 
-#: includes/configs/meta-boxes.php:20
-msgid "WooCommerce Product"
+#: templates/listing-package/view/listing-package-select-button.php:17
+msgid "Buy Package"
+msgstr ""
+
+#. Name of the plugin
+msgid "HivePress Paid Listings"
+msgstr ""
+
+#. Description of the plugin
+msgid "Charge users for adding listings."
+msgstr ""
+
+#. Author of the plugin
+msgid "HivePress"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://hivepress.io/"
 msgstr ""
