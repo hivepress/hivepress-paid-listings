@@ -226,6 +226,22 @@ final class Listing_Package {
 				// Get user package.
 				$user_package = reset( $user_packages );
 
+				// Set expiration time.
+				$expiration_period = absint( get_post_meta( $user_package->comment_post_ID, 'hp_expiration_period', true ) );
+
+				if ( $expiration_period > 0 ) {
+					update_post_meta( $listing->ID, 'hp_expiration_time', time() + $expiration_period * DAY_IN_SECONDS );
+				}
+
+				// Set featured status.
+				if ( get_post_meta( $user_package->comment_post_ID, 'hp_featured', true ) ) {
+					update_post_meta( $listing->ID, 'hp_featured', '1' );
+
+					if ( $expiration_period > 0 ) {
+						update_post_meta( $listing->ID, 'hp_featuring_time', time() + $expiration_period * DAY_IN_SECONDS );
+					}
+				}
+
 				// Update user package.
 				if ( $user_package->comment_karma > 1 ) {
 					wp_update_comment(
