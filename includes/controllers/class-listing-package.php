@@ -21,13 +21,6 @@ defined( 'ABSPATH' ) || exit;
 class Listing_Package extends Controller {
 
 	/**
-	 * Controller name.
-	 *
-	 * @var string
-	 */
-	protected static $name;
-
-	/**
 	 * Controller routes.
 	 *
 	 * @var array
@@ -44,7 +37,7 @@ class Listing_Package extends Controller {
 			[
 				'routes' => [
 					'submit_package' => [
-						'title'    => esc_html__( 'Select Package', 'hivepress-paid-listings' ),
+						'title'    => esc_html_x( 'Select Package', 'imperative', 'hivepress-paid-listings' ),
 						'path'     => '/submit-listing/package/?(?P<listing_package_id>\d+)?',
 						'redirect' => 'redirect_listing_submit_package_page',
 						'action'   => 'render_listing_submit_package_page',

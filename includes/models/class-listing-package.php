@@ -20,13 +20,6 @@ defined( 'ABSPATH' ) || exit;
 class Listing_Package extends Post {
 
 	/**
-	 * Model name.
-	 *
-	 * @var string
-	 */
-	protected static $name;
-
-	/**
 	 * Model fields.
 	 *
 	 * @var array

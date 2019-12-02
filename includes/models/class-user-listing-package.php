@@ -20,13 +20,6 @@ defined( 'ABSPATH' ) || exit;
 class User_Listing_Package extends Comment {
 
 	/**
-	 * Model name.
-	 *
-	 * @var string
-	 */
-	protected static $name;
-
-	/**
 	 * Model fields.
 	 *
 	 * @var array
