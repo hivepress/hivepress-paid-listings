@@ -40,8 +40,8 @@ class Listing_Submit_Package_Page extends Listing_Submit_Page {
 					'page_content' => [
 						'blocks' => [
 							'listing_packages' => [
-								'type'  => 'listing_packages',
-								'order' => 10,
+								'type'   => 'listing_packages',
+								'_order' => 10,
 							],
 						],
 					],

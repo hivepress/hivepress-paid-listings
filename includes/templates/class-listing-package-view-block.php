@@ -39,7 +39,7 @@ class Listing_Package_View_Block extends Template {
 				'blocks' => [
 					'listing_package_container' => [
 						'type'       => 'container',
-						'order'      => 10,
+						'_order'     => 10,
 
 						'attributes' => [
 							'class' => [ 'hp-listing-package', 'hp-listing-package--view-block' ],
@@ -49,7 +49,7 @@ class Listing_Package_View_Block extends Template {
 							'listing_package_header'  => [
 								'type'       => 'container',
 								'tag'        => 'header',
-								'order'      => 10,
+								'_order'     => 10,
 
 								'attributes' => [
 									'class' => [ 'hp-listing-package__header' ],
@@ -57,22 +57,22 @@ class Listing_Package_View_Block extends Template {
 
 								'blocks'     => [
 									'listing_package_name' => [
-										'type'     => 'element',
-										'filepath' => 'listing-package/view/block/listing-package-name',
-										'order'    => 10,
+										'type'   => 'part',
+										'path'   => 'listing-package/view/block/listing-package-name',
+										'_order' => 10,
 									],
 
 									'listing_package_price' => [
-										'type'     => 'element',
-										'filepath' => 'listing-package/view/listing-package-price',
-										'order'    => 20,
+										'type'   => 'part',
+										'path'   => 'listing-package/view/listing-package-price',
+										'_order' => 20,
 									],
 								],
 							],
 
 							'listing_package_content' => [
 								'type'       => 'container',
-								'order'      => 20,
+								'_order'     => 20,
 
 								'attributes' => [
 									'class' => [ 'hp-listing-package__content' ],
@@ -80,9 +80,9 @@ class Listing_Package_View_Block extends Template {
 
 								'blocks'     => [
 									'listing_package_description' => [
-										'type'     => 'element',
-										'filepath' => 'listing-package/view/listing-package-description',
-										'order'    => 10,
+										'type'   => 'part',
+										'path'   => 'listing-package/view/listing-package-description',
+										'_order' => 10,
 									],
 								],
 							],
@@ -90,7 +90,7 @@ class Listing_Package_View_Block extends Template {
 							'listing_package_footer'  => [
 								'type'       => 'container',
 								'tag'        => 'footer',
-								'order'      => 30,
+								'_order'     => 30,
 
 								'attributes' => [
 									'class' => [ 'hp-listing-package__footer' ],
@@ -98,9 +98,9 @@ class Listing_Package_View_Block extends Template {
 
 								'blocks'     => [
 									'listing_package_select_button' => [
-										'type'     => 'element',
-										'filepath' => 'listing-package/view/listing-package-select-button',
-										'order'    => 10,
+										'type'   => 'part',
+										'path'   => 'listing-package/view/listing-package-select-button',
+										'_order' => 10,
 									],
 								],
 							],

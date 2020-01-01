@@ -23,7 +23,7 @@ return [
 				'type'        => 'select',
 				'options'     => 'posts',
 				'post_type'   => 'product',
-				'order'       => 10,
+				'_order'      => 10,
 			],
 
 			'submission_limit'  => [
@@ -31,7 +31,7 @@ return [
 				'description' => hivepress()->translator->get_string( 'set_maximum_number_of_listing_submissions' ),
 				'type'        => 'number',
 				'min_value'   => 1,
-				'order'       => 20,
+				'_order'      => 20,
 			],
 
 			'expiration_period' => [
@@ -39,14 +39,14 @@ return [
 				'description' => hivepress()->translator->get_string( 'set_number_of_days_until_listing_expires' ),
 				'type'        => 'number',
 				'min_value'   => 1,
-				'order'       => 30,
+				'_order'      => 30,
 			],
 
 			'featured'          => [
 				'label'   => hivepress()->translator->get_string( 'featuring_of_listings' ),
 				'caption' => hivepress()->translator->get_string( 'make_listings_featured' ),
 				'type'    => 'checkbox',
-				'order'   => 40,
+				'_order'  => 40,
 			],
 		],
 	],

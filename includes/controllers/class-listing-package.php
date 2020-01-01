@@ -21,33 +21,26 @@ defined( 'ABSPATH' ) || exit;
 class Listing_Package extends Controller {
 
 	/**
-	 * Controller routes.
-	 *
-	 * @var array
-	 */
-	protected static $routes = [];
-
-	/**
-	 * Class initializer.
+	 * Class constructor.
 	 *
 	 * @param array $args Controller arguments.
 	 */
-	public static function init( $args = [] ) {
+	public function __construct( $args = [] ) {
 		$args = hp\merge_arrays(
 			[
 				'routes' => [
 					'submit_package' => [
 						'title'    => esc_html_x( 'Select Package', 'imperative', 'hivepress-paid-listings' ),
 						'path'     => '/submit-listing/package/?(?P<listing_package_id>\d+)?',
-						'redirect' => 'redirect_listing_submit_package_page',
-						'action'   => 'render_listing_submit_package_page',
+						'redirect' => [ $this, 'redirect_listing_submit_package_page' ],
+						'action'   => [ $this, 'render_listing_submit_package_page' ],
 					],
 				],
 			],
 			$args
 		);
 
-		parent::init( $args );
+		parent::__construct( $args );
 	}
 
 	/**

@@ -284,8 +284,8 @@ final class Listing_Package {
 			[
 				'items' => [
 					'submit_package' => [
-						'route' => 'listing_package/submit_package',
-						'order' => 35,
+						'route'  => 'listing_package/submit_package',
+						'_order' => 35,
 					],
 				],
 			]
