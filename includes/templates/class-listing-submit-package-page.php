@@ -47,8 +47,7 @@ class Listing_Submit_Package_Page extends Listing_Submit_Page {
 					],
 				],
 			],
-			$args,
-			'blocks'
+			$args
 		);
 
 		parent::init( $args );

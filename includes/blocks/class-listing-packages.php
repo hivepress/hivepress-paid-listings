@@ -57,7 +57,7 @@ class Listing_Packages extends Block {
 				$query->the_post();
 
 				// Get package.
-				$package = Models\Listing_Package::get_by_id( get_the_ID() );
+				$package = Models\Listing_Package::query()->get_by_id( get_the_ID() );
 
 				if ( ! is_null( $package ) ) {
 					$output .= '<div class="hp-grid__item hp-col-sm-' . esc_attr( $column_width ) . ' hp-col-xs-12">';

@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 return [
 	'paid_listings_frontend' => [
 		'handle'  => 'hp-paid-listings-frontend',
-		'src'     => HP_PAID_LISTINGS_URL . '/assets/css/frontend.min.css',
-		'version' => HP_PAID_LISTINGS_VERSION,
+		'src'     => hivepress()->get_url( 'paid_listings' ) . '/assets/css/frontend.min.css',
+		'version' => hivepress()->get_version( 'paid_listings' ),
 	],
 ];
