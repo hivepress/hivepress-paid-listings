@@ -20,54 +20,63 @@ defined( 'ABSPATH' ) || exit;
 class Listing_Package extends Post {
 
 	/**
-	 * Model fields.
-	 *
-	 * @var array
-	 */
-	protected static $fields = [];
-
-	/**
-	 * Model aliases.
-	 *
-	 * @var array
-	 */
-	protected static $aliases = [];
-
-	/**
-	 * Class initializer.
+	 * Class constructor.
 	 *
 	 * @param array $args Model arguments.
 	 */
-	public static function init( $args = [] ) {
+	public function __construct( $args = [] ) {
 		$args = hp\merge_arrays(
 			[
-				'fields'  => [
-					'name'        => [
+				'fields' => [
+					'name'          => [
 						'type'       => 'text',
-						'max_length' => 128,
+						'max_length' => 256,
 						'required'   => true,
+						'_alias'     => 'post_title',
 					],
 
-					'description' => [
+					'description'   => [
 						'type'       => 'textarea',
-						'max_length' => 2048,
+						'max_length' => 10240,
+						'_alias'     => 'post_content',
 					],
 
-					'product_id'  => [
+					'submit_limit'  => [
 						'type'      => 'number',
 						'min_value' => 1,
+						'required'  => true,
+						'_external' => true,
 					],
-				],
 
-				'aliases' => [
-					'post_title'   => 'name',
-					'post_content' => 'description',
-					'post_parent'  => 'product_id',
+					'expire_period' => [
+						'type'      => 'number',
+						'min_value' => 1,
+						'_external' => true,
+					],
+
+					'featured'      => [
+						'type'      => 'checkbox',
+						'_external' => true,
+					],
+
+					'active'        => [
+						'type'      => 'number',
+						'min_value' => 0,
+						'max_value' => 1,
+						'default'   => 1,
+						'_alias'    => 'comment_approved',
+					],
+
+					'product'       => [
+						'type'      => 'number',
+						'min_value' => 1,
+						'_alias'    => 'post_parent',
+					],
 				],
 			],
 			$args
 		);
 
-		parent::init( $args );
+		parent::__construct( $args );
 	}
 }

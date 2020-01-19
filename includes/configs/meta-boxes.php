@@ -16,25 +16,26 @@ return [
 		'screen' => 'listing_package',
 
 		'fields' => [
-			'product'           => [
+			'product'       => [
 				'label'       => hivepress()->translator->get_string( 'ecommerce_product' ),
 				'description' => esc_html__( 'Choose a product that must be purchased in order to get this package.', 'hivepress-paid-listings' ),
-				'alias'       => 'post_parent',
 				'type'        => 'select',
 				'options'     => 'posts',
-				'post_type'   => 'product',
+				'option_args' => [ 'post_type' => 'product' ],
+				'_alias'      => 'post_parent',
 				'_order'      => 10,
 			],
 
-			'submission_limit'  => [
+			'submit_limit'  => [
 				'label'       => hivepress()->translator->get_string( 'listing_limit' ),
 				'description' => hivepress()->translator->get_string( 'set_maximum_number_of_listing_submissions' ),
 				'type'        => 'number',
 				'min_value'   => 1,
+				'required'    => true,
 				'_order'      => 20,
 			],
 
-			'expiration_period' => [
+			'expire_period' => [
 				'label'       => hivepress()->translator->get_string( 'listing_expiration' ),
 				'description' => hivepress()->translator->get_string( 'set_number_of_days_until_listing_expires' ),
 				'type'        => 'number',
@@ -42,7 +43,7 @@ return [
 				'_order'      => 30,
 			],
 
-			'featured'          => [
+			'featured'      => [
 				'label'   => hivepress()->translator->get_string( 'featuring_of_listings' ),
 				'caption' => hivepress()->translator->get_string( 'make_listings_featured' ),
 				'type'    => 'checkbox',

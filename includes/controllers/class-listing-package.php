@@ -8,6 +8,7 @@
 namespace HivePress\Controllers;
 
 use HivePress\Helpers as hp;
+use HivePress\Models;
 use HivePress\Blocks;
 
 // Exit if accessed directly.
@@ -18,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class Listing_Package
  */
-class Listing_Package extends Controller {
+final class Listing_Package extends Controller {
 
 	/**
 	 * Class constructor.
@@ -29,9 +30,10 @@ class Listing_Package extends Controller {
 		$args = hp\merge_arrays(
 			[
 				'routes' => [
-					'submit_package' => [
+					'listing_submit_package_page' => [
 						'title'    => esc_html_x( 'Select Package', 'imperative', 'hivepress-paid-listings' ),
-						'path'     => '/submit-listing/package/?(?P<listing_package_id>\d+)?',
+						'base'     => 'listing_submit_page',
+						'path'     => '/package/?(?P<listing_package_id>\d+)?',
 						'redirect' => [ $this, 'redirect_listing_submit_package_page' ],
 						'action'   => [ $this, 'render_listing_submit_package_page' ],
 					],
@@ -50,76 +52,59 @@ class Listing_Package extends Controller {
 	 */
 	public function redirect_listing_submit_package_page() {
 
-		// Check authentication.
-		if ( ! is_user_logged_in() ) {
-			return add_query_arg( 'redirect', rawurlencode( hp\get_current_url() ), User::get_url( 'login_user' ) );
-		}
-
-		// Check listing limit.
-		if ( array_sum(
-			wp_list_pluck(
-				get_comments(
-					[
-						'type'    => 'hp_user_listing_package',
-						'user_id' => get_current_user_id(),
-					]
-				),
-				'comment_karma'
-			)
-		) > 0 ) {
-			return true;
-		}
-
-		// Get package ID.
-		$package_id = absint( get_query_var( 'hp_listing_package_id' ) );
-
-		// Check packages.
-		if ( hp\get_post_id(
+		// Get user packages.
+		$user_packages = Models\User_Listing_Package::query(
 			[
-				'post_type'   => 'hp_listing_package',
-				'post_status' => 'publish',
-				'post__in'    => 0 === $package_id ? [] : [ $package_id ],
+				'user' => get_current_user_id(),
 			]
-		) === 0 ) {
-			return true;
+		)->get();
+
+		// Check submission limit.
+		if ( array_sum(
+			array_map(
+				function( $user_package ) {
+					return $user_package->get_submit_limit();
+				},
+				$user_packages
+			)
+		) ) {
+			true;
 		}
 
-		if ( 0 !== $package_id ) {
+		if ( hivepress()->request->get_param( 'listing_package_id' ) ) {
 
-			// Get product ID.
-			$product_id = absint( wp_get_post_parent_id( $package_id ) );
+			// Get package.
+			$package = Models\Listing_Package::query()->get_by_id( hivepress()->request->get_param( 'listing_package_id' ) );
 
-			if ( class_exists( 'WooCommerce' ) && 0 !== $product_id ) {
+			if ( $package && $package->get_status() === 'publish' ) {
+				if ( hp\is_plugin_active( 'woocommerce' ) && $package->get_product__id() ) {
 
-				// Add product to cart.
-				WC()->cart->empty_cart();
-				WC()->cart->add_to_cart( $product_id );
+					// Add product to cart.
+					WC()->cart->empty_cart();
+					WC()->cart->add_to_cart( $package->get_product__id() );
 
-				return wc_get_page_permalink( 'checkout' );
-			} elseif ( count(
-				get_comments(
-					[
-						'type'    => 'hp_listing_package',
-						'post_id' => $package_id,
-						'user_id' => get_current_user_id(),
-						'number'  => 1,
-						'fields'  => 'ids',
-					]
-				)
-			) === 0 ) {
-				wp_insert_comment(
-					[
-						'comment_type'     => 'hp_user_listing_package',
-						'comment_approved' => 1,
-						'comment_post_ID'  => $package_id,
-						'user_id'          => get_current_user_id(),
-						'comment_karma'    => absint( get_post_meta( $package_id, 'hp_submission_limit', true ) ),
-						'comment_content'  => get_the_title( $package_id ),
-					]
-				);
+					return wc_get_page_permalink( 'checkout' );
+				}
 
-				return true;
+				if ( empty( $user_packages ) ) {
+
+					// Add user package.
+					$user_package = ( new Models\User_Listing_Package() )->fill(
+						[
+							'name'         => $package->get_name(),
+							'submit_limit' => $package->get_submit_limit(),
+							'user'         => get_current_user_id(),
+							'package'      => $package->get_id(),
+						]
+					);
+
+					if ( $user_package->save() ) {
+						return true;
+					}
+				}
 			}
+
+			return hivepress()->router->get_url( 'listing_submit_package_page' );
 		}
 
 		return false;
