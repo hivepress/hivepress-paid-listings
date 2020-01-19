@@ -99,7 +99,7 @@ final class Listing_Package extends Component {
 			$user_package->set_submit_limit( $user_package->get_submit_limit() - 1 )->save();
 		}
 
-		if ( ! $user_package->is_active() && ! $user_package->get_submit_limit() ) {
+		if ( ! $user_package->is_default() && ! $user_package->get_submit_limit() ) {
 			$user_package->delete();
 		}
 	}
@@ -186,18 +186,22 @@ final class Listing_Package extends Component {
 
 		if ( in_array( $new_status, [ 'processing', 'completed' ], true ) ) {
 
-			// Get user package IDs.
-			$user_package_ids = $user_packages->get_ids();
+			// Get package IDs.
+			$package_ids = array_map(
+				function( $user_package ) {
+					return $user_package->get_package__id();
+				},
+				$user_packages->get()
+			);
 
 			// Add user packages.
 			foreach ( $packages as $package ) {
-				if ( ! in_array( $package->get_id(), $user_package_ids, true ) ) {
-					( new Models\User_Listing_Package() )->fill(
+				if ( ! in_array( $package->get_id(), $package_ids, true ) ) {
+					( new Models\User_Listing_Package() )->fill(array_merge(
+						$package->serialize(),
 						[
-							'name'         => $package->get_name(),
-							'submit_limit' => $package->get_submit_limit(),
-							'user'         => $order->get_user_id(),
-							'package'      => $package->get_id(),
+							'user'    => $order->get_user_id(),
+							'package' => $package->get_id(),
 						]
 					)->save();
 				}

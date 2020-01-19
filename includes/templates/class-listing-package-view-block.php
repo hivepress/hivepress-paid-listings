@@ -2,8 +2,6 @@
 /**
  * Listing package view block template.
  *
- * @template listing_package_view_block
- * @description Listing package block in view context.
  * @package HivePress\Templates
  */
 
@@ -22,18 +20,11 @@ defined( 'ABSPATH' ) || exit;
 class Listing_Package_View_Block extends Template {
 
 	/**
-	 * Template blocks.
-	 *
-	 * @var array
-	 */
-	protected static $blocks = [];
-
-	/**
-	 * Class initializer.
+	 * Class constructor.
 	 *
 	 * @param array $args Template arguments.
 	 */
-	public static function init( $args = [] ) {
+	public function __construct( $args = [] ) {
 		$args = hp\merge_trees(
 			[
 				'blocks' => [
@@ -58,7 +49,7 @@ class Listing_Package_View_Block extends Template {
 								'blocks'     => [
 									'listing_package_name' => [
 										'type'   => 'part',
-										'path'   => 'listing-package/view/block/listing-package-name',
+										'path'   => 'listing-package/view/listing-package-name',
 										'_order' => 10,
 									],
 
@@ -111,6 +102,6 @@ class Listing_Package_View_Block extends Template {
 			$args
 		);
 
-		parent::init( $args );
+		parent::__construct( $args );
 	}
 }

@@ -4,7 +4,7 @@
  *
  * @package HivePress\Models
  */
-// todo.
+
 namespace HivePress\Models;
 
 use HivePress\Helpers as hp;
@@ -20,49 +20,82 @@ defined( 'ABSPATH' ) || exit;
 class User_Listing_Package extends Comment {
 
 	/**
-	 * Model fields.
-	 *
-	 * @var array
-	 */
-	protected static $fields = [];
-
-	/**
-	 * Model aliases.
-	 *
-	 * @var array
-	 */
-	protected static $aliases = [];
-
-	/**
 	 * Class initializer.
+	 *
+	 * @param array $meta Model meta.
+	 */
+	public static function init( $meta = [] ) {
+		$meta = hp\merge_arrays(
+			[
+				'alias' => 'hp_listing_package',
+			],
+			$meta
+		);
+
+		parent::init( $meta );
+	}
+
+	/**
+	 * Class constructor.
 	 *
 	 * @param array $args Model arguments.
 	 */
-	public static function init( $args = [] ) {
+	public function __construct( $args = [] ) {
 		$args = hp\merge_arrays(
 			[
-				'fields'  => [
-					'user_id'    => [
+				'fields' => [
+					'name'          => [
+						'type'       => 'text',
+						'max_length' => 256,
+						'required'   => true,
+						'_alias'     => 'comment_content',
+					],
+
+					'submit_limit'  => [
 						'type'      => 'number',
 						'min_value' => 1,
 						'required'  => true,
+						'_alias'    => 'comment_karma',
 					],
 
-					'package_id' => [
+					'expire_period' => [
+						'type'      => 'number',
+						'min_value' => 1,
+						'_external' => true,
+					],
+
+					'featured'      => [
+						'type'      => 'checkbox',
+						'_external' => true,
+					],
+
+					'default'       => [
+						'type'      => 'number',
+						'min_value' => 0,
+						'max_value' => 1,
+						'default'   => 0,
+						'_alias'    => 'comment_approved',
+					],
+
+					'user'          => [
 						'type'      => 'number',
 						'min_value' => 1,
 						'required'  => true,
+						'_alias'    => 'user_id',
+						'_model'    => 'user',
 					],
-				],
 
-				'aliases' => [
-					'user_id'         => 'user_id',
-					'comment_post_ID' => 'package_id',
+					'package'       => [
+						'type'      => 'number',
+						'min_value' => 1,
+						'_alias'    => 'comment_post_ID',
+						'_model'    => 'listing_package',
+					],
 				],
 			],
 			$args
 		);
 
-		parent::init( $args );
+		parent::__construct( $args );
 	}
 }

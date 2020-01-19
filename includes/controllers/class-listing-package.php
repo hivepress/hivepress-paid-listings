@@ -52,6 +52,15 @@ final class Listing_Package extends Controller {
 	 */
 	public function redirect_listing_submit_package_page() {
 
+		// Check packages.
+		if ( ! Models\Listing_Package::query()->filter(
+			[
+				'status' => 'publish',
+			]
+		)->get_first_id() ) {
+			return;
+		}
+
 		// Get user packages.
 		$user_packages = Models\User_Listing_Package::query(
 			[
@@ -90,12 +99,14 @@ final class Listing_Package extends Controller {
 
 					// Add user package.
 					$user_package = ( new Models\User_Listing_Package() )->fill(
-						[
-							'name'         => $package->get_name(),
-							'submit_limit' => $package->get_submit_limit(),
-							'user'         => get_current_user_id(),
-							'package'      => $package->get_id(),
-						]
+						array_merge(
+							$package->serialize(),
+							[
+								'default' => 1,
+								'user'    => get_current_user_id(),
+								'package' => $package->get_id(),
+							]
+						)
 					);
 
 					if ( $user_package->save() ) {

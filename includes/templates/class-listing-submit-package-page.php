@@ -2,8 +2,6 @@
 /**
  * Listing submit package page template.
  *
- * @template listing_submit_package_page
- * @description Listing submission page (package).
  * @package HivePress\Templates
  */
 
@@ -22,18 +20,11 @@ defined( 'ABSPATH' ) || exit;
 class Listing_Submit_Package_Page extends Listing_Submit_Page {
 
 	/**
-	 * Template blocks.
-	 *
-	 * @var array
-	 */
-	protected static $blocks = [];
-
-	/**
-	 * Class initializer.
+	 * Class constructor.
 	 *
 	 * @param array $args Template arguments.
 	 */
-	public static function init( $args = [] ) {
+	public function __construct( $args = [] ) {
 		$args = hp\merge_trees(
 			[
 				'blocks' => [
@@ -50,6 +41,6 @@ class Listing_Submit_Package_Page extends Listing_Submit_Page {
 			$args
 		);
 
-		parent::init( $args );
+		parent::__construct( $args );
 	}
 }

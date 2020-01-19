@@ -30,16 +30,36 @@ class Listing_Packages extends Block {
 
 		// Query packages.
 		$query = new \WP_Query(
-			[
-				'post_type'      => 'hp_listing_package',
-				'post_status'    => 'publish',
-				'posts_per_page' => -1,
-				'orderby'        => 'menu_order',
-				'order'          => 'ASC',
-			]
+			Models\Listing_Package::query()->filter(
+				[
+					'status' => 'publish',
+				]
+			)->order( [ 'sort_order' => 'asc' ] )
+			->get_args()
 		);
 
 		if ( $query->have_posts() ) {
+
+			// Get user packages.
+			$user_packages = [];
+
+			if ( is_user_logged_in() ) {
+				$user_packages = Models\User_Listing_Package::query()->filter(
+					[
+						'user' => get_current_user_id(),
+					]
+				)->get()->serialize();
+
+				$user_packages = array_combine(
+					array_map(
+						function( $user_package ) {
+							return $user_package->get_package__id();
+						},
+						$user_packages
+					),
+					$user_packages
+				);
+			}
 
 			// Get column width.
 			$columns      = absint( $query->found_posts );
@@ -57,17 +77,10 @@ class Listing_Packages extends Block {
 				$query->the_post();
 
 				// Get package.
-				$package = Models\Listing_Package::query()->get_by_id( get_the_ID() );
+				$package = Models\Listing_Package::query()->get_by_id( get_post() );
 
-				if ( ! is_null( $package ) ) {
+				if ( $package ) {
 					$output .= '<div class="hp-grid__item hp-col-sm-' . esc_attr( $column_width ) . ' hp-col-xs-12">';
-
-					// Get product.
-					$product = null;
-
-					if ( class_exists( 'WooCommerce' ) && $package->get_product_id() !== 0 ) {
-						$product = wc_get_product( $package->get_product_id() );
-					}
 
 					// Render package.
 					$output .= ( new Template(
@@ -75,8 +88,8 @@ class Listing_Packages extends Block {
 							'template' => 'listing_package_view_block',
 
 							'context'  => [
-								'listing_package' => $package,
-								'product'         => $product,
+								'listing_package'      => $package,
+								'user_listing_package' => hp\get_array_value( $user_packages, $package->get_id() ),
 							],
 						]
 					) )->render();
