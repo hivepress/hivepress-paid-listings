@@ -134,7 +134,7 @@ final class Listing_Package extends Component {
 					]
 				)->get()
 			)
-		)
+		);
 	}
 
 	/**
@@ -177,7 +177,7 @@ final class Listing_Package extends Component {
 				'user'        => $order->get_user_id(),
 				'package__in' => array_map(
 					function( $package ) {
-						return $package->get_id(),
+						return $package->get_id();
 					},
 					$packages
 				),
@@ -197,12 +197,14 @@ final class Listing_Package extends Component {
 			// Add user packages.
 			foreach ( $packages as $package ) {
 				if ( ! in_array( $package->get_id(), $package_ids, true ) ) {
-					( new Models\User_Listing_Package() )->fill(array_merge(
-						$package->serialize(),
-						[
-							'user'    => $order->get_user_id(),
-							'package' => $package->get_id(),
-						]
+					( new Models\User_Listing_Package() )->fill(
+						array_merge(
+							$package->serialize(),
+							[
+								'user'    => $order->get_user_id(),
+								'package' => $package->get_id(),
+							]
+						)
 					)->save();
 				}
 			}
