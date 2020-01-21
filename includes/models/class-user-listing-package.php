@@ -53,7 +53,7 @@ class User_Listing_Package extends Comment {
 
 					'submit_limit'  => [
 						'type'      => 'number',
-						'min_value' => 1,
+						'min_value' => 0,
 						'required'  => true,
 						'_alias'    => 'comment_karma',
 					],
@@ -88,6 +88,7 @@ class User_Listing_Package extends Comment {
 					'package'       => [
 						'type'      => 'number',
 						'min_value' => 1,
+						'required'  => true,
 						'_alias'    => 'comment_post_ID',
 						'_model'    => 'listing_package',
 					],

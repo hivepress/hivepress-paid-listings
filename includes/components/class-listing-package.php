@@ -59,6 +59,8 @@ final class Listing_Package extends Component {
 	 * @param string $old_status Old status.
 	 */
 	public function update_user_packages( $listing_id, $new_status, $old_status ) {
+
+		// Check listing status.
 		if ( 'auto-draft' !== $old_status ) {
 			return;
 		}
@@ -72,7 +74,7 @@ final class Listing_Package extends Component {
 				'user' => $listing->get_user__id(),
 			]
 		)->order( [ 'submit_limit' => 'desc' ] )
-		->get();
+		->get()->serialize();
 
 		if ( empty( $user_packages ) ) {
 			return;
@@ -81,24 +83,32 @@ final class Listing_Package extends Component {
 		// Get the first package.
 		$user_package = reset( $user_packages );
 
-		// Set expiration time.
-		if ( $user_package->get_expire_period() ) {
-			$listing->set_expired_time( time() + $user_package->get_expire_period() * DAY_IN_SECONDS );
-		}
+		if ( $user_package->get_expire_period() || $user_package->is_featured() ) {
 
-		// Set featured status.
-		if ( $user_package->is_featured() ) {
-			$listing->set_featured( true );
-
+			// Set expiration time.
 			if ( $user_package->get_expire_period() ) {
-				$listing->set_featured_time( time() + $user_package->get_expire_period() * DAY_IN_SECONDS );
+				$listing->set_expired_time( time() + $user_package->get_expire_period() * DAY_IN_SECONDS );
 			}
+
+			// Set featured status.
+			if ( $user_package->is_featured() ) {
+				$listing->set_featured( true );
+
+				if ( $user_package->get_expire_period() ) {
+					$listing->set_featured_time( time() + $user_package->get_expire_period() * DAY_IN_SECONDS );
+				}
+			}
+
+			// Update listing.
+			$listing->save();
 		}
 
+		// Update user package.
 		if ( $user_package->get_submit_limit() > 0 ) {
 			$user_package->set_submit_limit( $user_package->get_submit_limit() - 1 )->save();
 		}
 
+		// Delete user package.
 		if ( ! $user_package->is_default() && ! $user_package->get_submit_limit() ) {
 			$user_package->delete();
 		}
@@ -132,7 +142,7 @@ final class Listing_Package extends Component {
 					[
 						'status' => 'publish',
 					]
-				)->get()
+				)->get()->serialize()
 			)
 		);
 	}
@@ -165,7 +175,7 @@ final class Listing_Package extends Component {
 				'status'      => 'publish',
 				'product__in' => $product_ids,
 			]
-		);
+		)->get()->serialize();
 
 		if ( empty( $packages ) ) {
 			return;
@@ -191,7 +201,7 @@ final class Listing_Package extends Component {
 				function( $user_package ) {
 					return $user_package->get_package__id();
 				},
-				$user_packages->get()
+				$user_packages->get()->serialize()
 			);
 
 			// Add user packages.

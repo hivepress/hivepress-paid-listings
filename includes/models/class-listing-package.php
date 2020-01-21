@@ -41,6 +41,12 @@ class Listing_Package extends Post {
 						'_alias'     => 'post_content',
 					],
 
+					'status'        => [
+						'type'       => 'text',
+						'max_length' => 128,
+						'_alias'     => 'post_status',
+					],
+
 					'submit_limit'  => [
 						'type'      => 'number',
 						'min_value' => 1,
@@ -54,15 +60,15 @@ class Listing_Package extends Post {
 						'_external' => true,
 					],
 
+					'featured'      => [
+						'type'      => 'checkbox',
+						'_external' => true,
+					],
+
 					'sort_order'    => [
 						'type'      => 'number',
 						'min_value' => 0,
 						'_alias'    => 'menu_order',
-					],
-
-					'featured'      => [
-						'type'      => 'checkbox',
-						'_external' => true,
 					],
 
 					'product'       => [

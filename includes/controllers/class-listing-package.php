@@ -58,7 +58,7 @@ final class Listing_Package extends Controller {
 				'status' => 'publish',
 			]
 		)->get_first_id() ) {
-			return;
+			return true;
 		}
 
 		// Get user packages.
@@ -66,7 +66,7 @@ final class Listing_Package extends Controller {
 			[
 				'user' => get_current_user_id(),
 			]
-		)->get();
+		)->get()->serialize();
 
 		// Check submission limit.
 		if ( array_sum(
@@ -76,8 +76,8 @@ final class Listing_Package extends Controller {
 				},
 				$user_packages
 			)
-		) ) {
-			true;
+		) > 0 ) {
+			return true;
 		}
 
 		if ( hivepress()->request->get_param( 'listing_package_id' ) ) {
@@ -102,9 +102,9 @@ final class Listing_Package extends Controller {
 						array_merge(
 							$package->serialize(),
 							[
-								'default' => 1,
 								'user'    => get_current_user_id(),
 								'package' => $package->get_id(),
+								'default' => 1,
 							]
 						)
 					);

@@ -71,7 +71,7 @@ msgstr "Купить пакет"
 
 #: templates/listing-package/view/listing-package-select-button.php:14
 msgid "Select Package"
-msgstr "Выбрать пакет"
+msgstr "Выберите пакет"
 
 #. Name of the plugin
 msgid "HivePress Paid Listings"

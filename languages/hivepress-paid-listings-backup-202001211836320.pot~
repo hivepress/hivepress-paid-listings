@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HivePress Paid Listings\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-21 18:36+0000\n"
+"POT-Creation-Date: 2019-11-22 22:40+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -60,17 +60,13 @@ msgstr ""
 msgid "Set the maximum number of listing submissions."
 msgstr ""
 
-#: includes/controllers/class-listing-package.php:34
-msgctxt "imperative"
+#: includes/controllers/class-listing-package.php:47
+#: templates/listing-package/view/listing-package-select-button.php:17
 msgid "Select Package"
 msgstr ""
 
-#: templates/listing-package/view/listing-package-select-button.php:12
+#: templates/listing-package/view/listing-package-select-button.php:17
 msgid "Buy Package"
-msgstr ""
-
-#: templates/listing-package/view/listing-package-select-button.php:14
-msgid "Select Package"
 msgstr ""
 
 #. Name of the plugin

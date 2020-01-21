@@ -11,7 +11,7 @@ use HivePress\Helpers as hp;
 defined( 'ABSPATH' ) || exit;
 
 return [
-	'user_listing_package' => [
+	'listing_package' => [
 		'public' => false,
 	],
 ];
