@@ -62,7 +62,7 @@ final class Listing_Package extends Controller {
 		}
 
 		// Get user packages.
-		$user_packages = Models\User_Listing_Package::query(
+		$user_packages = Models\User_Listing_Package::query()->filter(
 			[
 				'user' => get_current_user_id(),
 			]
@@ -104,7 +104,7 @@ final class Listing_Package extends Controller {
 							[
 								'user'    => get_current_user_id(),
 								'package' => $package->get_id(),
-								'default' => 1,
+								'default' => true,
 							]
 						)
 					);

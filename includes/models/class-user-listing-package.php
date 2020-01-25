@@ -70,11 +70,8 @@ class User_Listing_Package extends Comment {
 					],
 
 					'default'       => [
-						'type'      => 'number',
-						'min_value' => 0,
-						'max_value' => 1,
-						'default'   => 0,
-						'_alias'    => 'comment_approved',
+						'type'      => 'checkbox',
+						'_external' => true,
 					],
 
 					'user'          => [
