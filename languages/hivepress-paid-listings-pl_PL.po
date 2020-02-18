@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: HivePress Paid Listings\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-01-21 18:36+0000\n"
-"PO-Revision-Date: 2020-02-14 21:50+0000\n"
+"PO-Revision-Date: 2020-02-18 12:54+0000\n"
 "Last-Translator: admin <admin@hivepress.local>\n"
 "Language-Team: Polski\n"
 "Language: pl_PL\n"
@@ -58,7 +58,7 @@ msgstr "Limit przekroczony"
 
 #: includes/configs/strings.php:16
 msgid "Set the maximum number of listing submissions."
-msgstr "Podaj maksymalną liczbę ogłoszeń dla dodawania."
+msgstr "Podaj maksymalną liczbę ogłoszeń dla dodania."
 
 #: includes/controllers/class-listing-package.php:34
 msgctxt "imperative"
@@ -79,7 +79,7 @@ msgstr "HivePress Płatne ogłoszenia"
 
 #. Description of the plugin
 msgid "Charge users for adding listings."
-msgstr "Pobieraj opłatę za dodawanie ogłoszeń."
+msgstr "Pobieraj opłatę za dodanie ogłoszeń."
 
 #. Author of the plugin
 msgid "HivePress"
