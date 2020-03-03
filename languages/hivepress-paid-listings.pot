@@ -1,0 +1,90 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: HivePress Paid Listings\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-01-21 18:36+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.3.1; wp-5.2.4"
+
+#: includes/configs/meta-boxes.php:21
+msgid "Choose a product that must be purchased in order to get this package."
+msgstr ""
+
+#: includes/configs/post-types.php:21 includes/configs/post-types.php:27
+msgid "Packages"
+msgstr ""
+
+#: includes/configs/post-types.php:22
+msgid "Package"
+msgstr ""
+
+#: includes/configs/post-types.php:23 includes/configs/post-types.php:26
+msgid "Add Package"
+msgstr ""
+
+#: includes/configs/post-types.php:24
+msgctxt "package"
+msgid "Add New"
+msgstr ""
+
+#: includes/configs/post-types.php:25
+msgid "Edit Package"
+msgstr ""
+
+#: includes/configs/post-types.php:28
+msgid "Search Packages"
+msgstr ""
+
+#: includes/configs/post-types.php:29 includes/configs/post-types.php:30
+msgid "No packages found."
+msgstr ""
+
+#: includes/configs/strings.php:14
+msgid "Listing Limit"
+msgstr ""
+
+#: includes/configs/strings.php:15
+msgid "Limit Exceeded"
+msgstr ""
+
+#: includes/configs/strings.php:16
+msgid "Set the maximum number of listing submissions."
+msgstr ""
+
+#: includes/controllers/class-listing-package.php:34
+msgctxt "imperative"
+msgid "Select Package"
+msgstr ""
+
+#: templates/listing-package/view/listing-package-select-button.php:12
+msgid "Buy Package"
+msgstr ""
+
+#: templates/listing-package/view/listing-package-select-button.php:14
+msgid "Select Package"
+msgstr ""
+
+#. Name of the plugin
+msgid "HivePress Paid Listings"
+msgstr ""
+
+#. Description of the plugin
+msgid "Charge users for adding listings."
+msgstr ""
+
+#. Author of the plugin
+msgid "HivePress"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://hivepress.io/"
+msgstr ""

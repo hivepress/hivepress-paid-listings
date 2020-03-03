@@ -1,0 +1,56 @@
+.hp {
+	/*--------------------------------------------------------------
+	Listing packages
+	--------------------------------------------------------------*/
+	&-listing-package {
+		&--view-block {
+			&:not(:last-child) {
+				margin-bottom: 2rem;
+			}
+		}
+
+		&--view-block &__content,
+		&--view-block &__footer,
+		&--view-block &__header {
+			&:not(:last-child) {
+				margin-bottom: 1rem;
+			}
+		}
+
+		&--view-block &__name,
+		&--view-block &__price {
+			&:not(:last-child) {
+				margin-bottom: 0.5rem;
+			}
+		}
+
+		&__name {
+			margin: 0;
+		}
+
+		&__price {
+			font-size: 120%;
+
+			ins {
+				text-decoration: none;
+			}
+		}
+
+		&--view-block &__name,
+		&--view-block &__price {
+			text-align: center;
+		}
+
+		&__description {
+			ul {
+				list-style: none;
+				margin: 0;
+				padding: 0;
+			}
+		}
+
+		&--view-block &__select-button {
+			width: 100%;
+		}
+	}
+}
