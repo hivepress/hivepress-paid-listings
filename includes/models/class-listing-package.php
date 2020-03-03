@@ -71,6 +71,15 @@ class Listing_Package extends Post {
 						'_alias'    => 'menu_order',
 					],
 
+					'categories'    => [
+						'type'        => 'select',
+						'options'     => 'terms',
+						'option_args' => [ 'taxonomy' => 'hp_listing_category' ],
+						'multiple'    => true,
+						'_model'      => 'listing_category',
+						'_relation'   => 'many_to_many',
+					],
+
 					'product'       => [
 						'type'      => 'number',
 						'min_value' => 1,
