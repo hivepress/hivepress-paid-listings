@@ -42,17 +42,23 @@ class Listing_Packages extends Block {
 	 * @return string
 	 */
 	public function render() {
+		global $wp_query;
+
 		$output = '';
 
 		// Query packages.
-		$query = new \WP_Query(
-			Models\Listing_Package::query()->filter(
-				[
-					'status' => 'publish',
-				]
-			)->order( [ 'sort_order' => 'asc' ] )
-			->get_args()
-		);
+		$query = $wp_query;
+
+		if ( ! isset( $this->context['listing_packages'] ) ) {
+			$query = new \WP_Query(
+				Models\Listing_Package::query()->filter(
+					[
+						'status' => 'publish',
+					]
+				)->order( [ 'sort_order' => 'asc' ] )
+				->get_args()
+			);
+		}
 
 		if ( $query->have_posts() ) {
 
