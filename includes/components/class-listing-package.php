@@ -35,6 +35,12 @@ final class Listing_Package extends Component {
 
 		if ( hp\is_plugin_active( 'woocommerce' ) ) {
 
+			// Set order item meta.
+			add_action( 'woocommerce_checkout_create_order_line_item', [ $this, 'set_order_item_meta' ], 10, 3 );
+
+			// Hide order item meta.
+			add_filter( 'woocommerce_hidden_order_itemmeta', [ $this, 'hide_order_item_meta' ] );
+
 			// Update order status.
 			add_action( 'woocommerce_order_status_changed', [ $this, 'update_order_status' ], 10, 4 );
 
@@ -163,6 +169,29 @@ final class Listing_Package extends Component {
 	}
 
 	/**
+	 * Sets order item meta.
+	 *
+	 * @param WC_Order_Item_Product $item Order item.
+	 * @param string                $cart_item_key Cart item key.
+	 * @param array                 $meta Meta values.
+	 */
+	public function set_order_item_meta( $item, $cart_item_key, $meta ) {
+		if ( isset( $meta['_hp_listing'] ) ) {
+			$item->update_meta_data( '_hp_listing', $meta['_hp_listing'] );
+		}
+	}
+
+	/**
+	 * Hides order item meta.
+	 *
+	 * @param array $meta Meta values.
+	 * @return array
+	 */
+	public function hide_order_item_meta( $meta ) {
+		return array_merge( $meta, [ '_hp_listing' ] );
+	}
+
+	/**
 	 * Updates order status.
 	 *
 	 * @param int      $order_id Order ID.
@@ -177,66 +206,109 @@ final class Listing_Package extends Component {
 			return;
 		}
 
-		// Get product IDs.
-		$product_ids = array_intersect( $this->get_package_product_ids(), hivepress()->woocommerce->get_order_product_ids( $order ) );
+		// Get order product IDs.
+		$order_product_ids = hivepress()->woocommerce->get_order_product_ids( $order );
 
-		if ( empty( $product_ids ) ) {
-			return;
-		}
+		// Get package product IDs.
+		$package_product_ids = array_intersect( $this->get_package_product_ids(), $order_product_ids );
 
-		// Get packages.
-		$packages = Models\Listing_Package::query()->filter(
-			[
-				'status'      => 'publish',
-				'product__in' => $product_ids,
-			]
-		)->get()->serialize();
+		if ( $package_product_ids ) {
 
-		if ( empty( $packages ) ) {
-			return;
-		}
+			// Get packages.
+			$packages = Models\Listing_Package::query()->filter(
+				[
+					'status'      => 'publish',
+					'product__in' => $package_product_ids,
+				]
+			)->get()->serialize();
 
-		// Get user packages.
-		$user_packages = Models\User_Listing_Package::query()->filter(
-			[
-				'user'        => $order->get_user_id(),
-				'package__in' => array_map(
-					function( $package ) {
-						return $package->get_id();
-					},
-					$packages
-				),
-			]
-		);
+			if ( empty( $packages ) ) {
+				return;
+			}
 
-		if ( in_array( $new_status, [ 'processing', 'completed' ], true ) ) {
-
-			// Get package IDs.
-			$package_ids = array_map(
-				function( $user_package ) {
-					return $user_package->get_package__id();
-				},
-				$user_packages->get()->serialize()
+			// Get user packages.
+			$user_packages = Models\User_Listing_Package::query()->filter(
+				[
+					'user'        => $order->get_user_id(),
+					'package__in' => array_map(
+						function( $package ) {
+							return $package->get_id();
+						},
+						$packages
+					),
+				]
 			);
 
-			// Add user packages.
-			foreach ( $packages as $package ) {
-				if ( ! in_array( $package->get_id(), $package_ids, true ) ) {
-					( new Models\User_Listing_Package() )->fill(
-						array_merge(
-							$package->serialize(),
-							[
-								'user'    => $order->get_user_id(),
-								'package' => $package->get_id(),
-							]
-						)
-					)->save();
+			if ( in_array( $new_status, [ 'processing', 'completed' ], true ) ) {
+
+				// Get package IDs.
+				$package_ids = array_map(
+					function( $user_package ) {
+						return $user_package->get_package__id();
+					},
+					$user_packages->get()->serialize()
+				);
+
+				// Add user packages.
+				foreach ( $packages as $package ) {
+					if ( ! in_array( $package->get_id(), $package_ids, true ) ) {
+						( new Models\User_Listing_Package() )->fill(
+							array_merge(
+								$package->serialize(),
+								[
+									'user'    => $order->get_user_id(),
+									'package' => $package->get_id(),
+								]
+							)
+						)->save();
+					}
+				}
+			} elseif ( in_array( $new_status, [ 'failed', 'cancelled', 'refunded' ], true ) ) {
+
+				// Delete user packages.
+				$user_packages->delete();
+			}
+		}
+
+		// Get feature product ID.
+		$feature_product_id = absint( get_option( 'hp_product_listing_feature' ) );
+
+		if ( $feature_product_id && in_array( $feature_product_id, $order_product_ids, true ) ) {
+			foreach ( $order->get_items() as $item ) {
+				if ( $item->get_product_id() === $feature_product_id ) {
+
+					// Get listing.
+					$listing = Models\Listing::query()->get_by_id( $item->get_meta( '_hp_listing', true, 'edit' ) );
+
+					if ( $listing ) {
+						if ( ! $listing->is_featured() && in_array( $new_status, [ 'processing', 'completed' ], true ) ) {
+
+							// Set featured status.
+							$listing->set_featured( true );
+
+							// Set featured time.
+							$featuring_period = absint( get_option( 'hp_listing_featuring_period' ) );
+
+							if ( $featuring_period ) {
+								$listing->set_featured_time( time() + $featuring_period * DAY_IN_SECONDS );
+							}
+
+							$listing->save();
+						} elseif ( $listing->is_featured() && in_array( $new_status, [ 'failed', 'cancelled', 'refunded' ], true ) ) {
+
+							// Remove featured status.
+							$listing->fill(
+								[
+									'featured'      => false,
+									'featured_time' => null,
+								]
+							)->save();
+						}
+					}
+
+					break;
 				}
 			}
-		} elseif ( in_array( $new_status, [ 'failed', 'cancelled', 'refunded' ], true ) ) {
-
-			// Delete user packages.
-			$user_packages->delete();
 		}
 	}
 
@@ -326,22 +398,26 @@ final class Listing_Package extends Component {
 	 * @return array
 	 */
 	public function alter_listing_edit_block( $template ) {
-		return hp\merge_trees(
-			$template,
-			[
-				'blocks' => [
-					'listing_actions_primary' => [
-						'blocks' => [
-							'listing_feature_link' => [
-								'type'   => 'part',
-								'path'   => 'listing/edit/block/listing-feature-link',
-								'_order' => 5,
+		if ( hp\is_plugin_active( 'woocommerce' ) && get_option( 'hp_product_listing_feature' ) ) {
+			$template = hp\merge_trees(
+				$template,
+				[
+					'blocks' => [
+						'listing_actions_primary' => [
+							'blocks' => [
+								'listing_feature_link' => [
+									'type'   => 'part',
+									'path'   => 'listing/edit/block/listing-feature-link',
+									'_order' => 5,
+								],
 							],
 						],
 					],
-				],
-			]
-		);
+				]
+			);
+		}
+
+		return $template;
 	}
 
 	/**
@@ -351,25 +427,29 @@ final class Listing_Package extends Component {
 	 * @return array
 	 */
 	public function alter_listing_edit_page( $template ) {
-		return hp\merge_trees(
-			$template,
-			[
-				'blocks' => [
-					'listing_update_form' => [
-						'footer' => [
-							'form_actions' => [
-								'blocks' => [
-									'listing_feature_link' => [
-										'type'   => 'part',
-										'path'   => 'listing/edit/page/listing-feature-link',
-										'_order' => 5,
+		if ( hp\is_plugin_active( 'woocommerce' ) && get_option( 'hp_product_listing_feature' ) ) {
+			$template = hp\merge_trees(
+				$template,
+				[
+					'blocks' => [
+						'listing_update_form' => [
+							'footer' => [
+								'form_actions' => [
+									'blocks' => [
+										'listing_feature_link' => [
+											'type'   => 'part',
+											'path'   => 'listing/edit/page/listing-feature-link',
+											'_order' => 5,
+										],
 									],
 								],
 							],
 						],
 					],
-				],
-			]
-		);
+				]
+			);
+		}
+
+		return $template;
 	}
 }

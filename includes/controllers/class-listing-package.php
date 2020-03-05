@@ -45,6 +45,12 @@ final class Listing_Package extends Controller {
 						'redirect' => [ $this, 'redirect_user_listing_packages_view_page' ],
 						'action'   => [ $this, 'render_user_listing_packages_view_page' ],
 					],
+
+					'listing_feature_page'            => [
+						'base'     => 'listing_edit_page',
+						'path'     => '/feature',
+						'redirect' => [ $this, 'redirect_listing_feature_page' ],
+					],
 				],
 			],
 			$args
@@ -245,5 +251,52 @@ final class Listing_Package extends Controller {
 				'template' => 'user_listing_packages_view_page',
 			]
 		) )->render();
+	}
+
+	/**
+	 * Redirects listing feature page.
+	 *
+	 * @return mixed
+	 */
+	public function redirect_listing_feature_page() {
+
+		// Check authentication.
+		if ( ! is_user_logged_in() ) {
+			return hivepress()->router->get_url(
+				'user_login_page',
+				[
+					'redirect' => hivepress()->router->get_current_url(),
+				]
+			);
+		}
+
+		// Get listing.
+		$listing = Models\Listing::query()->get_by_id( hivepress()->request->get_param( 'listing_id' ) );
+
+		if ( empty( $listing ) || get_current_user_id() !== $listing->get_user__id() || $listing->get_status() !== 'publish' || $listing->is_featured() ) {
+			return hivepress()->router->get_url( 'listings_edit_page' );
+		}
+
+		// Get product ID.
+		$product_id = absint( get_option( 'hp_product_listing_feature' ) );
+
+		if ( hp\is_plugin_active( 'woocommerce' ) && $product_id ) {
+
+			// Add product to cart.
+			WC()->cart->empty_cart();
+			WC()->cart->add_to_cart(
+				$product_id,
+				1,
+				0,
+				[],
+				[
+					'_hp_listing' => $listing->get_id(),
+				]
+			);
+
+			return wc_get_page_permalink( 'checkout' );
+		}
+
+		return true;
 	}
 }
