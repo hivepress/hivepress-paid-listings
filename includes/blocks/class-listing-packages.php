@@ -21,22 +21,6 @@ defined( 'ABSPATH' ) || exit;
 class Listing_Packages extends Block {
 
 	/**
-	 * Class initializer.
-	 *
-	 * @param array $meta Block meta.
-	 */
-	public static function init( $meta = [] ) {
-		$meta = hp\merge_arrays(
-			[
-				'label' => hivepress()->translator->get_string( 'listing_packages' ),
-			],
-			$meta
-		);
-
-		parent::init( $meta );
-	}
-
-	/**
 	 * Renders block HTML.
 	 *
 	 * @return string

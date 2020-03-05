@@ -52,14 +52,48 @@ final class Listing_Package extends Controller {
 	 */
 	public function redirect_listing_submit_package_page() {
 
-		// Check packages.
-		if ( ! Models\Listing_Package::query()->filter(
+		// Get listing.
+		$listing = hivepress()->request->get_context( 'listing' );
+
+		// Set package query.
+		$package_query = Models\Listing_Package::query()->filter(
 			[
 				'status' => 'publish',
 			]
-		)->get_first_id() ) {
+		)->order( [ 'sort_order' => 'asc' ] );
+
+		$package_query_args = array_merge(
+			$package_query->get_args(),
+			[
+				'fields'     => 'ids',
+				'categories' => $listing->get_categories__id(),
+			]
+		);
+
+		// Get package IDs.
+		$package_ids = hivepress()->cache->get_cache( $package_query_args, 'models/listing_package' );
+
+		if ( ! is_array( $package_ids ) ) {
+			$package_ids = [];
+
+			// Add IDs.
+			foreach ( $package_query->get() as $package ) {
+				if ( ! $package->get_categories__id() || array_intersect( $listing->get_categories__id(), $package->get_categories__id() ) ) {
+					$package_ids[] = $package->get_id();
+				}
+			}
+
+			// Cache IDs.
+			hivepress()->cache->set_cache( $package_query_args, 'models/listing_package', $package_ids );
+		}
+
+		// Check packages.
+		if ( empty( $package_ids ) ) {
 			return true;
 		}
+
+		// Set request context.
+		hivepress()->request->set_context( 'listing_package_ids', $package_ids );
 
 		// Get user packages.
 		$user_packages = Models\User_Listing_Package::query()->filter(
@@ -127,9 +161,30 @@ final class Listing_Package extends Controller {
 	 * @return string
 	 */
 	public function render_listing_submit_package_page() {
+
+		// Get package IDs.
+		$package_ids = hivepress()->request->get_context( 'listing_package_ids' );
+
+		// Query packages.
+		query_posts(
+			Models\Listing_Package::query()->filter(
+				[
+					'status' => 'publish',
+					'id__in' => $package_ids,
+				]
+			)->order( 'id__in' )
+			->limit( count( $package_ids ) )
+			->get_args()
+		);
+
+		// Render template.
 		return ( new Blocks\Template(
 			[
 				'template' => 'listing_submit_package_page',
+
+				'context'  => [
+					'listing_packages' => [],
+				],
 			]
 		) )->render();
 	}
