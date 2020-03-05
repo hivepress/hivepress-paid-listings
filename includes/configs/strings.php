@@ -15,4 +15,5 @@ return [
 	'listing_limit'                             => esc_html__( 'Listing Limit', 'hivepress-paid-listings' ),
 	'listing_limit_exceeded'                    => esc_html__( 'Limit Exceeded', 'hivepress-paid-listings' ),
 	'set_maximum_number_of_listing_submissions' => esc_html__( 'Set the maximum number of listing submissions.', 'hivepress-paid-listings' ),
+	'feature_listing'                           => esc_html__( 'Feature Listing', 'hivepress-paid-listings' ),
 ];

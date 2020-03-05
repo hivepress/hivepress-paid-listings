@@ -49,6 +49,10 @@ final class Listing_Package extends Component {
 
 			// Alter account menu.
 			add_filter( 'hivepress/v1/menus/user_account', [ $this, 'alter_account_menu' ] );
+
+			// Alter templates.
+			add_filter( 'hivepress/v1/templates/listing_edit_block', [ $this, 'alter_listing_edit_block' ] );
+			add_filter( 'hivepress/v1/templates/listing_edit_page', [ $this, 'alter_listing_edit_page' ] );
 		}
 
 		parent::__construct( $args );
@@ -313,5 +317,59 @@ final class Listing_Package extends Component {
 		}
 
 		return $menu;
+	}
+
+	/**
+	 * Alters listing edit block.
+	 *
+	 * @param array $template Template arguments.
+	 * @return array
+	 */
+	public function alter_listing_edit_block( $template ) {
+		return hp\merge_trees(
+			$template,
+			[
+				'blocks' => [
+					'listing_actions_primary' => [
+						'blocks' => [
+							'listing_feature_link' => [
+								'type'   => 'part',
+								'path'   => 'listing/edit/block/listing-feature-link',
+								'_order' => 5,
+							],
+						],
+					],
+				],
+			]
+		);
+	}
+
+	/**
+	 * Alters listing edit page.
+	 *
+	 * @param array $template Template arguments.
+	 * @return array
+	 */
+	public function alter_listing_edit_page( $template ) {
+		return hp\merge_trees(
+			$template,
+			[
+				'blocks' => [
+					'listing_update_form' => [
+						'footer' => [
+							'form_actions' => [
+								'blocks' => [
+									'listing_feature_link' => [
+										'type'   => 'part',
+										'path'   => 'listing/edit/page/listing-feature-link',
+										'_order' => 5,
+									],
+								],
+							],
+						],
+					],
+				],
+			]
+		);
 	}
 }
