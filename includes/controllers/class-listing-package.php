@@ -30,12 +30,20 @@ final class Listing_Package extends Controller {
 		$args = hp\merge_arrays(
 			[
 				'routes' => [
-					'listing_submit_package_page' => [
+					'listing_submit_package_page'     => [
 						'title'    => esc_html_x( 'Select Package', 'imperative', 'hivepress-paid-listings' ),
 						'base'     => 'listing_submit_page',
 						'path'     => '/package/?(?P<listing_package_id>\d+)?',
 						'redirect' => [ $this, 'redirect_listing_submit_package_page' ],
 						'action'   => [ $this, 'render_listing_submit_package_page' ],
+					],
+
+					'user_listing_packages_view_page' => [
+						'title'    => esc_html__( 'Packages', 'hivepress-paid-listings' ),
+						'base'     => 'user_account_page',
+						'path'     => '/listing-packages',
+						'redirect' => [ $this, 'redirect_user_listing_packages_view_page' ],
+						'action'   => [ $this, 'render_user_listing_packages_view_page' ],
 					],
 				],
 			],
@@ -190,5 +198,43 @@ final class Listing_Package extends Controller {
 				],
 			]
 		) )->render();
+	}
+
+	/**
+	 * Redirects user listing packages view page.
+	 *
+	 * @return mixed
+	 */
+	public function redirect_user_listing_packages_view_page() {
+
+		// Check authentication.
+		if ( ! is_user_logged_in() ) {
+			return hivepress()->router->get_url(
+				'user_login_page',
+				[
+					'redirect' => hivepress()->router->get_current_url(),
+				]
+			);
+		}
+
+		// Check listings.
+		if ( ! Models\User_Listing_Package::query()->filter(
+			[
+				'user' => get_current_user_id(),
+			]
+		)->get_first_id() ) {
+			return hivepress()->router->get_url( 'user_account_page' );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Renders user listing packages view page.
+	 *
+	 * @return string
+	 */
+	public function render_user_listing_packages_view_page() {
+
 	}
 }

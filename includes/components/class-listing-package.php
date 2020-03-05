@@ -46,6 +46,9 @@ final class Listing_Package extends Component {
 
 			// Alter submission menu.
 			add_filter( 'hivepress/v1/menus/listing_submit', [ $this, 'alter_submission_menu' ] );
+
+			// Alter account menu.
+			add_filter( 'hivepress/v1/menus/user_account', [ $this, 'alter_account_menu' ] );
 		}
 
 		parent::__construct( $args );
@@ -287,6 +290,27 @@ final class Listing_Package extends Component {
 			'route'  => 'listing_submit_package_page',
 			'_order' => 30,
 		];
+
+		return $menu;
+	}
+
+	/**
+	 * Alters account menu.
+	 *
+	 * @param array $menu Menu arguments.
+	 * @return array
+	 */
+	public function alter_account_menu( $menu ) {
+		if ( Models\User_Listing_Package::query()->filter(
+			[
+				'user' => get_current_user_id(),
+			]
+		)->get_first_id() ) {
+			$menu['items']['user_listing_packages_view'] = [
+				'route'  => 'user_listing_packages_view_page',
+				'_order' => 15,
+			];
+		}
 
 		return $menu;
 	}
