@@ -76,6 +76,14 @@ final class Listing_Package extends Component {
 		)->order( [ 'submit_limit' => 'desc' ] )
 		->get()->serialize();
 
+		// todo categories.
+		$user_packages = array_filter(
+			$user_packages,
+			function( $user_package ) use ( $listing ) {
+				return ! $user_package->get_categories__id() || array_intersect( $listing->get_categories__id(), $user_package->get_categories__id() );
+			}
+		);
+
 		if ( empty( $user_packages ) ) {
 			return;
 		}

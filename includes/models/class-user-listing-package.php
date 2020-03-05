@@ -89,6 +89,8 @@ class User_Listing_Package extends Comment {
 						'_alias'    => 'comment_post_ID',
 						'_model'    => 'listing_package',
 					],
+
+					// todo add categories.
 				],
 			],
 			$args
