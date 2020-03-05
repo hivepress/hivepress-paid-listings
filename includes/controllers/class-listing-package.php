@@ -235,6 +235,10 @@ final class Listing_Package extends Controller {
 	 * @return string
 	 */
 	public function render_user_listing_packages_view_page() {
-
+		return ( new Blocks\Template(
+			[
+				'template' => 'user_listing_packages_view_page',
+			]
+		) )->render();
 	}
 }

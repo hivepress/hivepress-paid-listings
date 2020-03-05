@@ -90,7 +90,7 @@ class User_Listing_Package extends Comment {
 						'_model'    => 'listing_package',
 					],
 
-					// todo add categories.
+					// todo add categories and date.
 				],
 			],
 			$args
