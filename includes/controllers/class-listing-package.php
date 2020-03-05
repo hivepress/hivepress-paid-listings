@@ -110,18 +110,23 @@ final class Listing_Package extends Controller {
 			]
 		)->get()->serialize();
 
-		// Get submission limit.
-		$user_package_limit = 0;
-
-		foreach ( $user_packages as $user_package ) {
-			// todo categories.
-			if ( ! $user_package->get_categories__id() || array_intersect( $listing->get_categories__id(), $user_package->get_categories__id() ) ) {
-				$user_package_limit += $user_package->get_submit_limit();
+		// todo categories.
+		$user_packages = array_filter(
+			$user_packages,
+			function( $user_package ) use ( $listing ) {
+				return ! $user_package->get_categories__id() || array_intersect( $listing->get_categories__id(), $user_package->get_categories__id() );
 			}
-		}
+		);
 
 		// Check submission limit.
-		if ( $user_package_limit > 0 ) {
+		if ( array_sum(
+			array_map(
+				function( $user_package ) {
+					return $user_package->get_submit_limit();
+				},
+				$user_packages
+			)
+		) > 0 ) {
 			return true;
 		}
 

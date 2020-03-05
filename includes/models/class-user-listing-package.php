@@ -51,6 +51,12 @@ class User_Listing_Package extends Comment {
 						'_alias'     => 'comment_content',
 					],
 
+					'todo_date'     => [
+						'type'   => 'date',
+						'format' => 'Y-m-d H:i:s',
+						'_alias' => 'comment_date',
+					],
+
 					'submit_limit'  => [
 						'type'      => 'number',
 						'min_value' => 0,
@@ -74,6 +80,16 @@ class User_Listing_Package extends Comment {
 						'_external' => true,
 					],
 
+					'categories'    => [
+						'type'        => 'select',
+						'options'     => 'terms',
+						'option_args' => [ 'taxonomy' => 'hp_listing_category' ],
+						'multiple'    => true,
+						'_model'      => 'listing_category',
+						'_relation'   => 'many_to_many',
+						'_external'   => true,
+					],
+
 					'user'          => [
 						'type'      => 'number',
 						'min_value' => 1,
@@ -89,13 +105,21 @@ class User_Listing_Package extends Comment {
 						'_alias'    => 'comment_post_ID',
 						'_model'    => 'listing_package',
 					],
-
-					// todo add categories and date.
 				],
 			],
 			$args
 		);
 
 		parent::__construct( $args );
+	}
+
+	/**
+	 * Sets categories.
+	 *
+	 * @param array $category_ids Category IDs.
+	 * @deprecated Since core version 1.3.2
+	 */
+	public function set_categories( $category_ids ) {
+		$this->fields['categories']->set_value( maybe_unserialize( $category_ids ) );
 	}
 }
