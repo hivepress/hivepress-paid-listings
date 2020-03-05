@@ -79,7 +79,7 @@ final class Listing_Package extends Component {
 		)->order( [ 'submit_limit' => 'desc' ] )
 		->get()->serialize();
 
-		// todo categories.
+		// Filter user packages.
 		$user_packages = array_filter(
 			$user_packages,
 			function( $user_package ) use ( $listing ) {

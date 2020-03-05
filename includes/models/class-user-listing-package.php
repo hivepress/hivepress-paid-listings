@@ -51,7 +51,7 @@ class User_Listing_Package extends Comment {
 						'_alias'     => 'comment_content',
 					],
 
-					'todo_date'     => [
+					'created_date'  => [
 						'type'   => 'date',
 						'format' => 'Y-m-d H:i:s',
 						'_alias' => 'comment_date',

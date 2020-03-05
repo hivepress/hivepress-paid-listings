@@ -110,7 +110,7 @@ final class Listing_Package extends Controller {
 			]
 		)->get()->serialize();
 
-		// todo categories.
+		// Filter user packages.
 		$user_packages = array_filter(
 			$user_packages,
 			function( $user_package ) use ( $listing ) {

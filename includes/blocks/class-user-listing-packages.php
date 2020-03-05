@@ -33,7 +33,7 @@ class User_Listing_Packages extends Block {
 			[
 				'user' => get_current_user_id(),
 			]
-		)->order( [ 'todo_date' => 'asc' ] )
+		)->order( [ 'created_date' => 'asc' ] )
 		->get()
 		->serialize();
 
