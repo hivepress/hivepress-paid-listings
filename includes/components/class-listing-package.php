@@ -432,16 +432,12 @@ final class Listing_Package extends Component {
 				$template,
 				[
 					'blocks' => [
-						'listing_update_form' => [
-							'footer' => [
-								'form_actions' => [
-									'blocks' => [
-										'listing_feature_link' => [
-											'type'   => 'part',
-											'path'   => 'listing/edit/page/listing-feature-link',
-											'_order' => 5,
-										],
-									],
+						'listing_actions_secondary' => [
+							'blocks' => [
+								'listing_feature_link' => [
+									'type'   => 'part',
+									'path'   => 'listing/edit/page/listing-feature-link',
+									'_order' => 10,
 								],
 							],
 						],
