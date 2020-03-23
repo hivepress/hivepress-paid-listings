@@ -265,6 +265,31 @@ final class Listing_Package extends Component {
 						)->save();
 					}
 				}
+
+				// Update submited listings.
+				foreach ( $order->get_items() as $item ) {
+					if ( in_array( $item->get_product_id(), $package_product_ids, true ) ) {
+
+						// Get listing.
+						$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing', true, 'edit' ) );
+
+						if ( $listing && $listing->is_drafted() ) {
+
+							// Get status.
+							$status = get_option( 'hp_listing_enable_moderation' ) ? 'pending' : 'publish';
+
+							// Update listing.
+							$listing->fill(
+								[
+									'status'  => $status,
+									'drafted' => null,
+								]
+							)->save();
+						}
+
+						break;
+					}
+				}
 			} elseif ( in_array( $new_status, [ 'failed', 'cancelled', 'refunded' ], true ) ) {
 
 				// Delete user packages.
