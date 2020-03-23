@@ -93,7 +93,7 @@ final class Listing_Package extends Component {
 		$user_packages = array_filter(
 			$user_packages,
 			function( $user_package ) use ( $listing ) {
-				return ! $user_package->get_categories__id() || array_intersect( $listing->get_categories__id(), $user_package->get_categories__id() );
+				return ! $user_package->get_categories__id() || array_intersect( (array) $listing->get_categories__id(), (array) $user_package->get_categories__id() );
 			}
 		);
 
@@ -174,6 +174,7 @@ final class Listing_Package extends Component {
 	 * @param WC_Order_Item_Product $item Order item.
 	 * @param string                $cart_item_key Cart item key.
 	 * @param array                 $meta Meta values.
+	 * @deprecated Since core version 1.3.2
 	 */
 	public function set_order_item_meta( $item, $cart_item_key, $meta ) {
 		if ( isset( $meta['_hp_listing'] ) ) {
@@ -186,6 +187,7 @@ final class Listing_Package extends Component {
 	 *
 	 * @param array $meta Meta values.
 	 * @return array
+	 * @deprecated Since core version 1.3.2
 	 */
 	public function hide_order_item_meta( $meta ) {
 		return array_merge( $meta, [ '_hp_listing' ] );

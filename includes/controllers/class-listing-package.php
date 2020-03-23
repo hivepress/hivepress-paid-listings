@@ -92,7 +92,7 @@ final class Listing_Package extends Controller {
 
 			// Add IDs.
 			foreach ( $package_query->get() as $package ) {
-				if ( ! $package->get_categories__id() || array_intersect( $listing->get_categories__id(), $package->get_categories__id() ) ) {
+				if ( ! $package->get_categories__id() || array_intersect( (array) $listing->get_categories__id(), (array) $package->get_categories__id() ) ) {
 					$package_ids[] = $package->get_id();
 				}
 			}
@@ -120,7 +120,7 @@ final class Listing_Package extends Controller {
 		$user_packages = array_filter(
 			$user_packages,
 			function( $user_package ) use ( $listing ) {
-				return ! $user_package->get_categories__id() || array_intersect( $listing->get_categories__id(), $user_package->get_categories__id() );
+				return ! $user_package->get_categories__id() || array_intersect( (array) $listing->get_categories__id(), (array) $user_package->get_categories__id() );
 			}
 		);
 
