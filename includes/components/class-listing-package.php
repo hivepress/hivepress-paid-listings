@@ -363,23 +363,34 @@ final class Listing_Package extends Component {
 			return;
 		}
 
-		// Get listing ID.
-		$listing_id = Models\Listing::query()->filter(
-			[
-				'status'  => 'auto-draft',
-				'drafted' => true,
-				'user'    => get_current_user_id(),
-			]
-		)->get_first_id();
+		foreach ( $order->get_items() as $item ) {
+			if ( in_array( $item->get_product_id(), $product_ids, true ) ) {
 
-		if ( empty( $listing_id ) ) {
-			return;
+				// Get listing.
+				$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing', true, 'edit' ) );
+
+				if ( $listing && $listing->get_user__id() === get_current_user_id() ) {
+
+					// Get redirect URL.
+					$redirect_url = null;
+
+					if ( $listing->is_drafted() ) {
+						$redirect_url = hivepress()->router->get_url( 'listing_submit_package_page' );
+					} elseif ( $listing->get_status() === 'publish' ) {
+						$redirect_url = hivepress()->router->get_url( 'listing_view_page', [ 'listing_id' => $listing->get_id() ] );
+					}
+
+					// Redirect page.
+					if ( $redirect_url ) {
+						wp_safe_redirect( $redirect_url );
+
+						exit;
+					}
+				}
+
+				break;
+			}
 		}
-
-		// Redirect page.
-		wp_safe_redirect( hivepress()->router->get_url( 'listing_submit_package_page' ) );
-
-		exit;
 	}
 
 	/**
