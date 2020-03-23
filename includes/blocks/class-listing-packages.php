@@ -76,7 +76,7 @@ class Listing_Packages extends Block {
 			}
 
 			// Render packages.
-			$output  = '<div class="hp-grid hp-block">';
+			$output  = '<div class="hp-listing-packages hp-grid hp-block">';
 			$output .= '<div class="hp-row">';
 
 			while ( $query->have_posts() ) {
