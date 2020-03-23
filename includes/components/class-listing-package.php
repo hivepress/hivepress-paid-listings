@@ -280,7 +280,7 @@ final class Listing_Package extends Component {
 				if ( $item->get_product_id() === $feature_product_id ) {
 
 					// Get listing.
-					$listing = Models\Listing::query()->get_by_id( $item->get_meta( '_hp_listing', true, 'edit' ) );
+					$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing', true, 'edit' ) );
 
 					if ( $listing ) {
 						if ( ! $listing->is_featured() && in_array( $new_status, [ 'processing', 'completed' ], true ) ) {

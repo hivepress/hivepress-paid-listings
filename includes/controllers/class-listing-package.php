@@ -284,15 +284,7 @@ final class Listing_Package extends Controller {
 
 			// Add product to cart.
 			WC()->cart->empty_cart();
-			WC()->cart->add_to_cart(
-				$product_id,
-				1,
-				0,
-				[],
-				[
-					'_hp_listing' => $listing->get_id(),
-				]
-			);
+			WC()->cart->add_to_cart( $product_id, 1, 0, [], [ 'hp_listing' => $listing->get_id() ] );
 
 			return wc_get_page_permalink( 'checkout' );
 		}
