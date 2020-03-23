@@ -38,6 +38,14 @@ final class Listing_Package extends Controller {
 						'action'   => [ $this, 'render_listing_submit_package_page' ],
 					],
 
+					'listing_renew_package_page'      => [
+						'title'    => esc_html_x( 'Select Package', 'imperative', 'hivepress-paid-listings' ),
+						'base'     => 'listing_renew_page',
+						'path'     => '/package/?(?P<listing_package_id>\d+)?',
+						'redirect' => [ $this, 'redirect_listing_renew_package_page' ],
+						'action'   => [ $this, 'render_listing_renew_package_page' ],
+					],
+
 					'user_listing_packages_view_page' => [
 						'title'    => esc_html__( 'Packages', 'hivepress-paid-listings' ),
 						'base'     => 'user_account_page',

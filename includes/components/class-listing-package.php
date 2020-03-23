@@ -50,10 +50,8 @@ final class Listing_Package extends Component {
 
 		if ( ! is_admin() ) {
 
-			// Alter submission menu.
+			// Alter menus.
 			add_filter( 'hivepress/v1/menus/listing_submit', [ $this, 'alter_submission_menu' ] );
-
-			// Alter account menu.
 			add_filter( 'hivepress/v1/menus/user_account', [ $this, 'alter_account_menu' ] );
 
 			// Alter templates.
