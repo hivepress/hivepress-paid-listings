@@ -51,8 +51,9 @@ final class Listing_Package extends Component {
 		if ( ! is_admin() ) {
 
 			// Alter menus.
-			add_filter( 'hivepress/v1/menus/listing_submit', [ $this, 'alter_submission_menu' ] );
-			add_filter( 'hivepress/v1/menus/user_account', [ $this, 'alter_account_menu' ] );
+			add_filter( 'hivepress/v1/menus/listing_submit', [ $this, 'alter_listing_submit_menu' ] );
+			add_filter( 'hivepress/v1/menus/listing_renew', [ $this, 'alter_listing_renew_menu' ] );
+			add_filter( 'hivepress/v1/menus/user_account', [ $this, 'alter_user_account_menu' ] );
 
 			// Alter templates.
 			add_filter( 'hivepress/v1/templates/listing_edit_block', [ $this, 'alter_listing_edit_block' ] );
@@ -271,18 +272,34 @@ final class Listing_Package extends Component {
 						// Get listing.
 						$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing', true, 'edit' ) );
 
-						if ( $listing && $listing->is_drafted() ) {
+						if ( $listing ) {
+							if ( $listing->is_drafted() ) {
 
-							// Get status.
-							$status = get_option( 'hp_listing_enable_moderation' ) ? 'pending' : 'publish';
+								// Get status.
+								$status = get_option( 'hp_listing_enable_moderation' ) ? 'pending' : 'publish';
 
-							// Update listing.
-							$listing->fill(
-								[
-									'status'  => $status,
-									'drafted' => null,
-								]
-							)->save();
+								// Add listing.
+								$listing->fill(
+									[
+										'status'  => $status,
+										'drafted' => null,
+									]
+								)->save();
+							} elseif ( $listing->get_status() === 'draft' && $listing->get_expired_time() && $listing->get_expired_time() < time() ) {
+
+								// Get date.
+								$date = current_time( 'mysql' );
+
+								// Renew listing.
+								$listing->fill(
+									[
+										'status'           => 'publish',
+										'created_date'     => $date,
+										'created_date_gmt' => get_gmt_from_date( $date ),
+										'expired_time'     => null,
+									]
+								)->save();
+							}
 						}
 
 						break;
@@ -347,57 +364,81 @@ final class Listing_Package extends Component {
 			return;
 		}
 
-		// Get product IDs.
-		$product_ids = $this->get_package_product_ids();
-
-		if ( empty( $product_ids ) ) {
-			return;
-		}
-
 		// Get order.
 		$order = wc_get_order( get_query_var( 'order-received' ) );
 
-		if ( empty( $order ) || ! in_array( $order->get_status(), [ 'processing', 'completed' ], true ) || ! array_intersect( $product_ids, hivepress()->woocommerce->get_order_product_ids( $order ) ) ) {
+		if ( empty( $order ) || ! in_array( $order->get_status(), [ 'processing', 'completed' ], true ) ) {
 			return;
 		}
 
-		foreach ( $order->get_items() as $item ) {
-			if ( in_array( $item->get_product_id(), $product_ids, true ) ) {
+		// Get order product IDs.
+		$order_product_ids = hivepress()->woocommerce->get_order_product_ids( $order );
 
-				// Get listing.
-				$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing', true, 'edit' ) );
+		// Get package product IDs.
+		$package_product_ids = array_intersect( $this->get_package_product_ids(), $order_product_ids );
 
-				if ( $listing && $listing->get_user__id() === get_current_user_id() ) {
+		if ( $package_product_ids ) {
+			foreach ( $order->get_items() as $item ) {
+				if ( in_array( $item->get_product_id(), $package_product_ids, true ) ) {
 
-					// Get redirect URL.
-					$redirect_url = null;
+					// Get listing.
+					$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing', true, 'edit' ) );
 
-					if ( $listing->is_drafted() ) {
-						$redirect_url = hivepress()->router->get_url( 'listing_submit_package_page' );
-					} elseif ( $listing->get_status() === 'publish' ) {
-						$redirect_url = hivepress()->router->get_url( 'listing_view_page', [ 'listing_id' => $listing->get_id() ] );
+					if ( $listing && $listing->get_user__id() === get_current_user_id() ) {
+
+						// Get redirect URL.
+						$redirect_url = null;
+
+						if ( $listing->get_status() === 'pending' ) {
+							$redirect_url = hivepress()->router->get_url( 'listings_edit_page' );
+						} elseif ( $listing->get_status() === 'publish' ) {
+							$redirect_url = hivepress()->router->get_url( 'listing_view_page', [ 'listing_id' => $listing->get_id() ] );
+						}
+
+						// Redirect page.
+						if ( $redirect_url ) {
+							wp_safe_redirect( $redirect_url );
+
+							exit;
+						}
 					}
 
-					// Redirect page.
-					if ( $redirect_url ) {
-						wp_safe_redirect( $redirect_url );
+					break;
+				}
+			}
+		}
+
+		// Get feature product ID.
+		$feature_product_id = absint( get_option( 'hp_product_listing_feature' ) );
+
+		if ( $feature_product_id && in_array( $feature_product_id, $order_product_ids, true ) ) {
+			foreach ( $order->get_items() as $item ) {
+				if ( $item->get_product_id() === $feature_product_id ) {
+
+					// Get listing.
+					$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing', true, 'edit' ) );
+
+					if ( $listing && $listing->get_user__id() === get_current_user_id() && $listing->is_featured() ) {
+
+						// Redirect page.
+						wp_safe_redirect( hivepress()->router->get_url( 'listing_feature_complete_page', [ 'listing_id' => $listing->get_id() ] ) );
 
 						exit;
 					}
-				}
 
-				break;
+					break;
+				}
 			}
 		}
 	}
 
 	/**
-	 * Alters submission menu.
+	 * Alters listing submission menu.
 	 *
 	 * @param array $menu Menu arguments.
 	 * @return array
 	 */
-	public function alter_submission_menu( $menu ) {
+	public function alter_listing_submit_menu( $menu ) {
 		$menu['items']['listing_submit_package'] = [
 			'route'  => 'listing_submit_package_page',
 			'_order' => 30,
@@ -407,12 +448,27 @@ final class Listing_Package extends Component {
 	}
 
 	/**
-	 * Alters account menu.
+	 * Alters listing renewal menu.
 	 *
 	 * @param array $menu Menu arguments.
 	 * @return array
 	 */
-	public function alter_account_menu( $menu ) {
+	public function alter_listing_renew_menu( $menu ) {
+		$menu['items']['listing_renew_package'] = [
+			'route'  => 'listing_renew_package_page',
+			'_order' => 20,
+		];
+
+		return $menu;
+	}
+
+	/**
+	 * Alters user account menu.
+	 *
+	 * @param array $menu Menu arguments.
+	 * @return array
+	 */
+	public function alter_user_account_menu( $menu ) {
 		if ( Models\User_Listing_Package::query()->filter(
 			[
 				'user' => get_current_user_id(),
