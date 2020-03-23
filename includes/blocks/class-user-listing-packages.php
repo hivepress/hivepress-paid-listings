@@ -38,7 +38,7 @@ class User_Listing_Packages extends Block {
 		->serialize();
 
 		if ( $user_listing_packages ) {
-			$output .= '<table class="hp-table">';
+			$output .= '<table class="hp-user-listing-packages hp-table hp-block">';
 
 			foreach ( $user_listing_packages as $user_listing_package ) {
 				if ( hp\is_class_instance( $user_listing_package, '\HivePress\Models\User_Listing_Package' ) ) {
