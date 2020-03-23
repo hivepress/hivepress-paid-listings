@@ -32,6 +32,7 @@ class Listing_Submit_Package_Page extends Listing_Submit_Page {
 						'blocks' => [
 							'listing_packages' => [
 								'type'   => 'listing_packages',
+								'mode'   => 'submit',
 								'_order' => 10,
 							],
 						],

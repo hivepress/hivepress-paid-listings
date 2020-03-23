@@ -21,6 +21,13 @@ defined( 'ABSPATH' ) || exit;
 class Listing_Packages extends Block {
 
 	/**
+	 * Template mode.
+	 *
+	 * @var string
+	 */
+	protected $mode = 'view';
+
+	/**
 	 * Renders block HTML.
 	 *
 	 * @return string
@@ -86,15 +93,32 @@ class Listing_Packages extends Block {
 				$package = Models\Listing_Package::query()->get_by_id( get_post() );
 
 				if ( $package ) {
-					$output .= '<div class="hp-grid__item hp-col-sm-' . esc_attr( $column_width ) . ' hp-col-xs-12">';
+
+					// Get package URL.
+					$package_url = null;
+
+					if ( 'submit' === $this->mode ) {
+						$package_url = hivepress()->router->get_url( 'listing_submit_package_page', [ 'listing_package_id' => $package->get_id() ] );
+					} elseif ( 'renew' === $this->mode ) {
+						$package_url = hivepress()->router->get_url(
+							'listing_renew_package_page',
+							[
+								'listing_id'         => hivepress()->request->get_context( 'listing_id' ),
+								'listing_package_id' => $package->get_id(),
+							]
+						);
+					}
 
 					// Render package.
+					$output .= '<div class="hp-grid__item hp-col-sm-' . esc_attr( $column_width ) . ' hp-col-xs-12">';
+
 					$output .= ( new Template(
 						[
 							'template' => 'listing_package_view_block',
 
 							'context'  => [
 								'listing_package'      => $package,
+								'listing_package_url'  => $package_url,
 								'user_listing_package' => hp\get_array_value( $user_packages, $package->get_id() ),
 							],
 						]
