@@ -34,7 +34,7 @@ final class Listing_Package extends Controller {
 						'title'    => esc_html_x( 'Select Package', 'imperative', 'hivepress-paid-listings' ),
 						'base'     => 'listing_submit_page',
 						'path'     => '/package/?(?P<listing_package_id>\d+)?',
-						'redirect' => [ $this, 'redirect_listing_submit_package_page' ],
+						'redirect' => [ $this, 'redirect_listing_packages_view_page' ],
 						'action'   => [ $this, 'render_listing_submit_package_page' ],
 					],
 
@@ -42,7 +42,7 @@ final class Listing_Package extends Controller {
 						'title'    => esc_html_x( 'Select Package', 'imperative', 'hivepress-paid-listings' ),
 						'base'     => 'listing_renew_page',
 						'path'     => '/package/?(?P<listing_package_id>\d+)?',
-						'redirect' => [ $this, 'redirect_listing_renew_package_page' ],
+						'redirect' => [ $this, 'redirect_listing_packages_view_page' ],
 						'action'   => [ $this, 'render_listing_renew_package_page' ],
 					],
 
@@ -59,6 +59,14 @@ final class Listing_Package extends Controller {
 						'path'     => '/feature',
 						'redirect' => [ $this, 'redirect_listing_feature_page' ],
 					],
+
+					'listing_feature_complete_page'   => [
+						'title'    => hivepress()->translator->get_string( 'listing_featured' ),
+						'base'     => 'listing_feature_page',
+						'path'     => '/complete',
+						'redirect' => [ $this, 'redirect_listing_feature_complete_page' ],
+						'action'   => [ $this, 'render_listing_feature_complete_page' ],
+					],
 				],
 			],
 			$args
@@ -68,11 +76,11 @@ final class Listing_Package extends Controller {
 	}
 
 	/**
-	 * Redirects listing submit package page.
+	 * Redirects listing packages view page.
 	 *
 	 * @return mixed
 	 */
-	public function redirect_listing_submit_package_page() {
+	public function redirect_listing_packages_view_page() {
 
 		// Get listing.
 		$listing = hivepress()->request->get_context( 'listing' );
@@ -95,7 +103,7 @@ final class Listing_Package extends Controller {
 		// Get package IDs.
 		$package_ids = hivepress()->cache->get_cache( $package_query_args, 'models/listing_package' );
 
-		if ( ! is_array( $package_ids ) ) {
+		if ( is_null( $package_ids ) ) {
 			$package_ids = [];
 
 			// Add IDs.
@@ -115,6 +123,7 @@ final class Listing_Package extends Controller {
 		}
 
 		// Set request context.
+		hivepress()->request->set_context( 'listing_id', $listing->get_id() );
 		hivepress()->request->set_context( 'listing_package_ids', $package_ids );
 
 		// Get user packages.
@@ -179,7 +188,7 @@ final class Listing_Package extends Controller {
 				}
 			}
 
-			return hivepress()->router->get_url( 'listing_submit_package_page' );
+			return home_url( '/' );
 		}
 
 		return false;
@@ -211,6 +220,40 @@ final class Listing_Package extends Controller {
 		return ( new Blocks\Template(
 			[
 				'template' => 'listing_submit_package_page',
+
+				'context'  => [
+					'listing_packages' => [],
+				],
+			]
+		) )->render();
+	}
+
+	/**
+	 * Renders listing renew package page.
+	 *
+	 * @return string
+	 */
+	public function render_listing_renew_package_page() {
+
+		// Get package IDs.
+		$package_ids = hivepress()->request->get_context( 'listing_package_ids' );
+
+		// Query packages.
+		query_posts(
+			Models\Listing_Package::query()->filter(
+				[
+					'status' => 'publish',
+					'id__in' => $package_ids,
+				]
+			)->order( 'id__in' )
+			->limit( count( $package_ids ) )
+			->get_args()
+		);
+
+		// Render template.
+		return ( new Blocks\Template(
+			[
+				'template' => 'listing_renew_package_page',
 
 				'context'  => [
 					'listing_packages' => [],
@@ -298,5 +341,52 @@ final class Listing_Package extends Controller {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Redirects listing feature complete page.
+	 *
+	 * @return mixed
+	 */
+	public function redirect_listing_feature_complete_page() {
+
+		// Check authentication.
+		if ( ! is_user_logged_in() ) {
+			return hivepress()->router->get_url(
+				'user_login_page',
+				[
+					'redirect' => hivepress()->router->get_current_url(),
+				]
+			);
+		}
+
+		// Get listing.
+		$listing = Models\Listing::query()->get_by_id( hivepress()->request->get_param( 'listing_id' ) );
+
+		if ( empty( $listing ) || get_current_user_id() !== $listing->get_user__id() || ! $listing->is_featured() ) {
+			return home_url( '/' );
+		}
+
+		// Set request context.
+		hivepress()->request->set_context( 'listing', $listing );
+
+		return false;
+	}
+
+	/**
+	 * Renders listing feature complete page.
+	 *
+	 * @return string
+	 */
+	public function render_listing_feature_complete_page() {
+		return ( new Blocks\Template(
+			[
+				'template' => 'listing_feature_complete_page',
+
+				'context'  => [
+					'listing' => hivepress()->request->get_context( 'listing' ),
+				],
+			]
+		) )->render();
 	}
 }
