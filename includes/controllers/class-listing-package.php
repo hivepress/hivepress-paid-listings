@@ -92,7 +92,8 @@ final class Listing_Package extends Controller {
 			]
 		)->order( [ 'sort_order' => 'asc' ] );
 
-		$package_query_args = array_merge(
+		// Set cache key.
+		$cache_key = array_merge(
 			$package_query->get_args(),
 			[
 				'fields'     => 'ids',
@@ -101,20 +102,20 @@ final class Listing_Package extends Controller {
 		);
 
 		// Get package IDs.
-		$package_ids = hivepress()->cache->get_cache( $package_query_args, 'models/listing_package' );
+		$package_ids = hivepress()->cache->get_cache( $cache_key, 'models/listing_package' );
 
 		if ( is_null( $package_ids ) ) {
 			$package_ids = [];
 
 			// Add IDs.
 			foreach ( $package_query->get() as $package ) {
-				if ( ! $package->get_categories__id() || array_intersect( (array) $listing->get_categories__id(), (array) $package->get_categories__id() ) ) {
+				if ( ! $package->get_categories__id() || array_intersect( (array) $listing->get_categories__id(), $package->get_categories__id() ) ) {
 					$package_ids[] = $package->get_id();
 				}
 			}
 
 			// Cache IDs.
-			hivepress()->cache->set_cache( $package_query_args, 'models/listing_package', $package_ids );
+			hivepress()->cache->set_cache( $cache_key, 'models/listing_package', $package_ids );
 		}
 
 		// Check packages.
@@ -137,7 +138,7 @@ final class Listing_Package extends Controller {
 		$user_packages = array_filter(
 			$user_packages,
 			function( $user_package ) use ( $listing ) {
-				return ! $user_package->get_categories__id() || array_intersect( (array) $listing->get_categories__id(), (array) $user_package->get_categories__id() );
+				return ! $user_package->get_categories__id() || array_intersect( (array) $listing->get_categories__id(), $user_package->get_categories__id() );
 			}
 		);
 
@@ -279,7 +280,7 @@ final class Listing_Package extends Controller {
 			);
 		}
 
-		// Check listings.
+		// Check user packages.
 		if ( ! Models\User_Listing_Package::query()->filter(
 			[
 				'user' => get_current_user_id(),
@@ -363,8 +364,8 @@ final class Listing_Package extends Controller {
 		// Get listing.
 		$listing = Models\Listing::query()->get_by_id( hivepress()->request->get_param( 'listing_id' ) );
 
-		if ( empty( $listing ) || get_current_user_id() !== $listing->get_user__id() || ! $listing->is_featured() ) {
-			return home_url( '/' );
+		if ( empty( $listing ) || get_current_user_id() !== $listing->get_user__id() || $listing->get_status() !== 'publish' || ! $listing->is_featured() ) {
+			return hivepress()->router->get_url( 'listings_edit_page' );
 		}
 
 		// Set request context.
