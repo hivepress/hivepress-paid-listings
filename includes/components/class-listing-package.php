@@ -125,6 +125,10 @@ final class Listing_Package extends Component {
 
 		// Update user package.
 		if ( $user_package->get_submit_limit() > 0 ) {
+			if ( $user_package->get_categories__id() ) {
+				$user_package->set_categories( array_intersect( $user_package->get_categories__id(), Models\Listing_Category::query()->get_ids() ) );
+			}
+
 			$user_package->set_submit_limit( $user_package->get_submit_limit() - 1 )->save();
 		}
 
