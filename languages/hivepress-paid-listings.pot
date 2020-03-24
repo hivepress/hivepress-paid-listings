@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HivePress Paid Listings\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-05 19:59+0000\n"
+"POT-Creation-Date: 2020-03-24 18:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -20,7 +20,7 @@ msgid "Choose a product that must be purchased in order to get this package."
 msgstr ""
 
 #: includes/configs/post-types.php:21 includes/configs/post-types.php:27
-#: includes/controllers/class-listing-package.php:48
+#: includes/controllers/class-listing-package.php:50
 msgid "Packages"
 msgstr ""
 
@@ -49,8 +49,8 @@ msgstr ""
 msgid "No packages found."
 msgstr ""
 
-#: includes/configs/settings.php:23
-msgid "Choose a product that must be purchased in order to feature a listing."
+#: includes/configs/settings.php:17
+msgid "Featuring"
 msgstr ""
 
 #: includes/configs/settings.php:31
@@ -58,11 +58,11 @@ msgid "Featuring Period"
 msgstr ""
 
 #: includes/configs/strings.php:14
-msgid "Featuring"
+msgid "Feature Listing"
 msgstr ""
 
 #: includes/configs/strings.php:15
-msgid "Feature Listing"
+msgid "Listing Featured"
 msgstr ""
 
 #: includes/configs/strings.php:16
@@ -78,14 +78,26 @@ msgid "Limit Exceeded"
 msgstr ""
 
 #: includes/configs/strings.php:19
-msgid "Set the maximum number of listing submissions."
+#, php-format
+msgid ""
+"Thank you! Your listing \"%s\" is featured and will appear at the top of the "
+"page."
 msgstr ""
 
 #: includes/configs/strings.php:20
+msgid "Set the maximum number of listing submissions."
+msgstr ""
+
+#: includes/configs/strings.php:21
 msgid "Set the number of days after which a listing loses featured status."
 msgstr ""
 
-#: includes/controllers/class-listing-package.php:40
+#: includes/configs/strings.php:22
+msgid "Choose a product that must be purchased in order to feature a listing."
+msgstr ""
+
+#: includes/controllers/class-listing-package.php:34
+#: includes/controllers/class-listing-package.php:42
 msgctxt "imperative"
 msgid "Select Package"
 msgstr ""
@@ -99,6 +111,7 @@ msgid "Select Package"
 msgstr ""
 
 #: templates/listing/edit/block/listing-feature-link.php:8
+#: templates/listing/edit/page/listing-feature-link.php:7
 msgid "Feature"
 msgstr ""
 
@@ -112,7 +125,7 @@ msgid "HivePress Paid Listings"
 msgstr ""
 
 #. Description of the plugin
-msgid "Charge users for adding listings."
+msgid "Charge users for adding, featuring and renewing listings."
 msgstr ""
 
 #. Author of the plugin
