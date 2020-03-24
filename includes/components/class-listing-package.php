@@ -64,6 +64,26 @@ final class Listing_Package extends Component {
 	}
 
 	/**
+	 * Gets package product IDs.
+	 *
+	 * @return array
+	 */
+	protected function get_package_product_ids() {
+		return array_filter(
+			array_map(
+				function( $package ) {
+					return $package->get_product__id();
+				},
+				Models\Listing_Package::query()->filter(
+					[
+						'status' => 'publish',
+					]
+				)->get()->serialize()
+			)
+		);
+	}
+
+	/**
 	 * Updates user packages.
 	 *
 	 * @param int    $listing_id Listing ID.
@@ -73,7 +93,7 @@ final class Listing_Package extends Component {
 	public function update_user_packages( $listing_id, $new_status, $old_status ) {
 
 		// Check listing status.
-		if ( 'auto-draft' !== $old_status ) {
+		if ( 'publish' !== $new_status ) {
 			return;
 		}
 
@@ -92,7 +112,7 @@ final class Listing_Package extends Component {
 		$user_packages = array_filter(
 			$user_packages,
 			function( $user_package ) use ( $listing ) {
-				return ! $user_package->get_categories__id() || array_intersect( (array) $listing->get_categories__id(), (array) $user_package->get_categories__id() );
+				return ! $user_package->get_categories__id() || array_intersect( (array) $listing->get_categories__id(), $user_package->get_categories__id() );
 			}
 		);
 
@@ -152,26 +172,6 @@ final class Listing_Package extends Component {
 	}
 
 	/**
-	 * Gets package product IDs.
-	 *
-	 * @return array
-	 */
-	protected function get_package_product_ids() {
-		return array_filter(
-			array_map(
-				function( $package ) {
-					return $package->get_product__id();
-				},
-				Models\Listing_Package::query()->filter(
-					[
-						'status' => 'publish',
-					]
-				)->get()->serialize()
-			)
-		);
-	}
-
-	/**
 	 * Sets order item meta.
 	 *
 	 * @param WC_Order_Item_Product $item Order item.
@@ -225,22 +225,13 @@ final class Listing_Package extends Component {
 					'status'      => 'publish',
 					'product__in' => $package_product_ids,
 				]
-			)->get()->serialize();
-
-			if ( empty( $packages ) ) {
-				return;
-			}
+			)->get();
 
 			// Get user packages.
 			$user_packages = Models\User_Listing_Package::query()->filter(
 				[
 					'user'        => $order->get_user_id(),
-					'package__in' => array_map(
-						function( $package ) {
-							return $package->get_id();
-						},
-						$packages
-					),
+					'package__in' => $packages->get_ids(),
 				]
 			);
 
@@ -388,7 +379,7 @@ final class Listing_Package extends Component {
 					// Get listing.
 					$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing', true, 'edit' ) );
 
-					if ( $listing && $listing->get_user__id() === get_current_user_id() ) {
+					if ( $listing ) {
 
 						// Get redirect URL.
 						$redirect_url = null;
@@ -422,7 +413,7 @@ final class Listing_Package extends Component {
 					// Get listing.
 					$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing', true, 'edit' ) );
 
-					if ( $listing && $listing->get_user__id() === get_current_user_id() && $listing->is_featured() ) {
+					if ( $listing && $listing->is_featured() ) {
 
 						// Redirect page.
 						wp_safe_redirect( hivepress()->router->get_url( 'listing_feature_complete_page', [ 'listing_id' => $listing->get_id() ] ) );
@@ -445,7 +436,7 @@ final class Listing_Package extends Component {
 	public function alter_listing_submit_menu( $menu ) {
 		$menu['items']['listing_submit_package'] = [
 			'route'  => 'listing_submit_package_page',
-			'_order' => 30,
+			'_order' => 100,
 		];
 
 		return $menu;
@@ -460,7 +451,7 @@ final class Listing_Package extends Component {
 	public function alter_listing_renew_menu( $menu ) {
 		$menu['items']['listing_renew_package'] = [
 			'route'  => 'listing_renew_package_page',
-			'_order' => 20,
+			'_order' => 100,
 		];
 
 		return $menu;
