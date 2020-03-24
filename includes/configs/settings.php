@@ -14,7 +14,7 @@ return [
 	'listings' => [
 		'sections' => [
 			'featuring' => [
-				'title'  => hivepress()->translator->get_string( 'featuring' ),
+				'title'  => esc_html__( 'Featuring', 'hivepress-paid-listings' ),
 				'_order' => 40,
 
 				'fields' => [
