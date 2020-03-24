@@ -1,6 +1,6 @@
 <?php
 /**
- * Listing submit package page template.
+ * Listing renew package page template.
  *
  * @package HivePress\Templates
  */
@@ -13,11 +13,11 @@ use HivePress\Helpers as hp;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Listing submit package page template class.
+ * Listing renew package page template class.
  *
- * @class Listing_Submit_Package_Page
+ * @class Listing_Renew_Package_Page
  */
-class Listing_Submit_Package_Page extends Listing_Submit_Page {
+class Listing_Renew_Package_Page extends Listing_Renew_Page {
 
 	/**
 	 * Class constructor.
@@ -32,7 +32,7 @@ class Listing_Submit_Package_Page extends Listing_Submit_Page {
 						'blocks' => [
 							'listing_packages' => [
 								'type'   => 'listing_packages',
-								'mode'   => 'submit',
+								'mode'   => 'renew',
 								'_order' => 10,
 							],
 						],

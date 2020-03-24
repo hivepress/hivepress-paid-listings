@@ -28,35 +28,38 @@ class User_Listing_Packages extends Block {
 	public function render() {
 		$output = '';
 
-		// Get packages.
-		$user_listing_packages = Models\User_Listing_Package::query()->filter(
-			[
-				'user' => get_current_user_id(),
-			]
-		)->order( [ 'created_date' => 'desc' ] )
-		->get()
-		->serialize();
+		if ( is_user_logged_in() ) {
 
-		if ( $user_listing_packages ) {
-			$output .= '<table class="hp-table">';
+			// Get packages.
+			$user_listing_packages = Models\User_Listing_Package::query()->filter(
+				[
+					'user' => get_current_user_id(),
+				]
+			)->order( [ 'created_date' => 'desc' ] )
+			->get()
+			->serialize();
 
-			foreach ( $user_listing_packages as $user_listing_package ) {
-				if ( hp\is_class_instance( $user_listing_package, '\HivePress\Models\User_Listing_Package' ) ) {
+			if ( $user_listing_packages ) {
+				$output .= '<table class="hp-user-listing-packages hp-table hp-block">';
 
-					// Render package.
-					$output .= ( new Template(
-						[
-							'template' => 'user_listing_package_view_block',
+				foreach ( $user_listing_packages as $user_listing_package ) {
+					if ( hp\is_class_instance( $user_listing_package, '\HivePress\Models\User_Listing_Package' ) ) {
 
-							'context'  => [
-								'user_listing_package' => $user_listing_package,
-							],
-						]
-					) )->render();
+						// Render package.
+						$output .= ( new Template(
+							[
+								'template' => 'user_listing_package_view_block',
+
+								'context'  => [
+									'user_listing_package' => $user_listing_package,
+								],
+							]
+						) )->render();
+					}
 				}
-			}
 
-			$output .= '</table>';
+				$output .= '</table>';
+			}
 		}
 
 		return $output;

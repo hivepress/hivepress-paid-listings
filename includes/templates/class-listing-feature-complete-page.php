@@ -1,6 +1,6 @@
 <?php
 /**
- * Listing submit package page template.
+ * Listing feature complete page template.
  *
  * @package HivePress\Templates
  */
@@ -13,11 +13,11 @@ use HivePress\Helpers as hp;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Listing submit package page template class.
+ * Listing feature complete page template class.
  *
- * @class Listing_Submit_Package_Page
+ * @class Listing_Feature_Complete_Page
  */
-class Listing_Submit_Package_Page extends Listing_Submit_Page {
+class Listing_Feature_Complete_Page extends Listing_Feature_Page {
 
 	/**
 	 * Class constructor.
@@ -30,9 +30,9 @@ class Listing_Submit_Package_Page extends Listing_Submit_Page {
 				'blocks' => [
 					'page_content' => [
 						'blocks' => [
-							'listing_packages' => [
-								'type'   => 'listing_packages',
-								'mode'   => 'submit',
+							'listing_complete_message' => [
+								'type'   => 'part',
+								'path'   => 'listing/feature/listing-complete-message',
 								'_order' => 10,
 							],
 						],

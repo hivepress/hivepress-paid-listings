@@ -3,10 +3,10 @@ msgstr ""
 "Project-Id-Version: HivePress Paid Listings\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-03-24 18:01+0000\n"
-"PO-Revision-Date: 2020-03-24 18:08+0000\n"
+"PO-Revision-Date: 2020-03-24 18:14+0000\n"
 "Last-Translator: regt <admin@admin.com>\n"
-"Language-Team: Russian\n"
-"Language: ru_RU\n"
+"Language-Team: Ukrainian\n"
+"Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && "
 "n%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
 "MIME-Version: 1.0\n"
@@ -17,37 +17,45 @@ msgstr ""
 
 #: includes/configs/meta-boxes.php:21
 msgid "Choose a product that must be purchased in order to get this package."
-msgstr "Выберите продукт, который должен быть куплен для получения пакета."
+msgstr ""
+"Виберіть продукт, який повинен бути куплений для отримання пакету.\n"
 
 #: includes/configs/post-types.php:21 includes/configs/post-types.php:27
 #: includes/controllers/class-listing-package.php:50
 msgid "Packages"
-msgstr "Пакеты"
+msgstr ""
+"Пакети\n"
 
 #: includes/configs/post-types.php:22
 msgid "Package"
-msgstr "Пакет"
+msgstr ""
+"Пакет\n"
 
 #: includes/configs/post-types.php:23 includes/configs/post-types.php:26
 msgid "Add Package"
-msgstr "Добавить пакет"
+msgstr ""
+"Додати пакет\n"
 
 #: includes/configs/post-types.php:24
 msgctxt "package"
 msgid "Add New"
-msgstr "Добавить новый"
+msgstr ""
+"Додати новий\n"
 
 #: includes/configs/post-types.php:25
 msgid "Edit Package"
-msgstr "Редактировать пакет"
+msgstr ""
+"Редагувати пакет\n"
 
 #: includes/configs/post-types.php:28
 msgid "Search Packages"
-msgstr "Искать пакеты"
+msgstr ""
+"Шукати пакети\n"
 
 #: includes/configs/post-types.php:29 includes/configs/post-types.php:30
 msgid "No packages found."
-msgstr "Пакетов не найдено."
+msgstr ""
+"Пакетів не знайдено.\n"
 
 #: includes/configs/settings.php:17
 msgid "Featuring"
@@ -55,27 +63,29 @@ msgstr "Реклама"
 
 #: includes/configs/settings.php:31
 msgid "Featuring Period"
-msgstr "Срок рекламирования"
+msgstr "Термін рекламування"
 
 #: includes/configs/strings.php:14
 msgid "Feature Listing"
-msgstr "Рекламировать объявление"
+msgstr "Рекламувати оголошення"
 
 #: includes/configs/strings.php:15
 msgid "Listing Featured"
-msgstr "Объявление рекламируется"
+msgstr "Оголошення рекламується"
 
 #: includes/configs/strings.php:16
 msgid "Listing Packages"
-msgstr "Пакеты объявлений"
+msgstr "Пакети оголошень"
 
 #: includes/configs/strings.php:17
 msgid "Listing Limit"
-msgstr "Лимит объявлений"
+msgstr ""
+"Ліміт оголошень\n"
 
 #: includes/configs/strings.php:18
 msgid "Limit Exceeded"
-msgstr "Лимит превышен"
+msgstr ""
+"Ліміт перевищено\n"
 
 #: includes/configs/strings.php:19
 #, php-format
@@ -83,59 +93,61 @@ msgid ""
 "Thank you! Your listing \"%s\" is featured and will appear at the top of the "
 "page."
 msgstr ""
-"Спасибо! Ваше объявление \"%s\" рекламируется и будет отображаться вверху "
-"страницы."
+"Дякуємо! Ваше оголошення \"%s\" рекламується і буде відображатися на горі "
+"сторінки."
 
 #: includes/configs/strings.php:20
 msgid "Set the maximum number of listing submissions."
-msgstr "Введите максимальное количество объявлений для добавления."
+msgstr "Введіть максимальну кількість оголошень для додавання."
 
 #: includes/configs/strings.php:21
 msgid "Set the number of days after which a listing loses featured status."
-msgstr ""
-"Введите количество дней, после которого объявление не будет рекламироваться."
+msgstr "Введіть кількість днів, після якої оголошення не буде рекламуватися."
 
 #: includes/configs/strings.php:22
 msgid "Choose a product that must be purchased in order to feature a listing."
-msgstr "Выберите продукт, который должен быть куплен для рекламы объявления."
+msgstr "Виберіть продукт, який повинен бути куплений для реклами оголошення."
 
 #: includes/controllers/class-listing-package.php:34
 #: includes/controllers/class-listing-package.php:42
 msgctxt "imperative"
 msgid "Select Package"
-msgstr "Выберите пакет"
+msgstr "Виберіть пакет"
 
 #: templates/listing-package/view/listing-package-select-button.php:12
 msgid "Buy Package"
-msgstr "Купить пакет"
+msgstr ""
+"Купити пакет\n"
 
 #: templates/listing-package/view/listing-package-select-button.php:14
 msgid "Select Package"
-msgstr "Выбрать пакет"
+msgstr ""
+"Вибрати пакет\n"
 
 #: templates/listing/edit/block/listing-feature-link.php:8
 #: templates/listing/edit/page/listing-feature-link.php:7
 msgid "Feature"
-msgstr "Рекламировать"
+msgstr "Рекламувати"
 
 #: templates/listing/edit/block/listing-feature-link.php:10
 msgctxt "listing"
 msgid "Featured"
-msgstr "Рекламируется"
+msgstr "Рекламується"
 
 #. Name of the plugin
 msgid "HivePress Paid Listings"
-msgstr "HivePress Платные объявления"
+msgstr "HivePress Платні оголошення"
 
 #. Description of the plugin
 msgid "Charge users for adding, featuring and renewing listings."
 msgstr ""
-"Берите с пользователей плату за добавление, рекламирование и обновление "
-"объявлений."
+"Беріть плату з користувачів за додавання, рекламування і оновлення оголошень."
 
 #. Author of the plugin
 msgid "HivePress"
-msgstr "HivePress"
+msgstr ""
+"HivePress\n"
+"\n"
 
 #. Author URI of the plugin
 msgid "https://hivepress.io/"

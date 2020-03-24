@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HivePress Paid Listings\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-05 19:59+0000\n"
-"PO-Revision-Date: 2020-03-05 20:08+0000\n"
-"Last-Translator: sdfsdf <dev-email@flywheel.local>\n"
+"POT-Creation-Date: 2020-03-24 18:01+0000\n"
+"PO-Revision-Date: 2020-03-24 18:06+0000\n"
+"Last-Translator: regt <admin@admin.com>\n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10 >= 2 && n%10<=4 "
@@ -20,7 +20,7 @@ msgid "Choose a product that must be purchased in order to get this package."
 msgstr "Wybierz produkt, który musi zostać kupiony dla otrzymania pakietu."
 
 #: includes/configs/post-types.php:21 includes/configs/post-types.php:27
-#: includes/controllers/class-listing-package.php:48
+#: includes/controllers/class-listing-package.php:50
 msgid "Packages"
 msgstr "Pakiety"
 
@@ -49,21 +49,21 @@ msgstr "Szukaj pakietów"
 msgid "No packages found."
 msgstr "Nie znaleziono żadnych pakietów."
 
-#: includes/configs/settings.php:23
-msgid "Choose a product that must be purchased in order to feature a listing."
-msgstr "Wybierz produkt, który musi zostać kupiony dla promowania ogłoszenia."
+#: includes/configs/settings.php:17
+msgid "Featuring"
+msgstr "Promowanie"
 
 #: includes/configs/settings.php:31
 msgid "Featuring Period"
 msgstr "Okres promowania"
 
 #: includes/configs/strings.php:14
-msgid "Featuring"
-msgstr "Promowanie"
-
-#: includes/configs/strings.php:15
 msgid "Feature Listing"
 msgstr "Promuj ogłoszenie"
+
+#: includes/configs/strings.php:15
+msgid "Listing Featured"
+msgstr "Ogłoszenie jest promowane"
 
 #: includes/configs/strings.php:16
 msgid "Listing Packages"
@@ -78,14 +78,28 @@ msgid "Limit Exceeded"
 msgstr "Limit przekroczony"
 
 #: includes/configs/strings.php:19
+#, php-format
+msgid ""
+"Thank you! Your listing \"%s\" is featured and will appear at the top of the "
+"page."
+msgstr ""
+"Dziękuję! Twoje ogłoszenie \"%s\" jest promowane i będzie wyświetlane na "
+"górze strony."
+
+#: includes/configs/strings.php:20
 msgid "Set the maximum number of listing submissions."
 msgstr "Podaj maksymalną liczbę ogłoszeń dla dodania."
 
-#: includes/configs/strings.php:20
+#: includes/configs/strings.php:21
 msgid "Set the number of days after which a listing loses featured status."
 msgstr "Podaj liczbę dni, po których ogłoszenie nie będzie promowane."
 
-#: includes/controllers/class-listing-package.php:40
+#: includes/configs/strings.php:22
+msgid "Choose a product that must be purchased in order to feature a listing."
+msgstr "Wybierz produkt, który musi zostać kupiony dla promowania ogłoszenia."
+
+#: includes/controllers/class-listing-package.php:34
+#: includes/controllers/class-listing-package.php:42
 msgctxt "imperative"
 msgid "Select Package"
 msgstr "Wybierz pakiet"
@@ -99,6 +113,7 @@ msgid "Select Package"
 msgstr "Wybierz pakiet"
 
 #: templates/listing/edit/block/listing-feature-link.php:8
+#: templates/listing/edit/page/listing-feature-link.php:7
 msgid "Feature"
 msgstr "Promuj"
 
@@ -112,8 +127,8 @@ msgid "HivePress Paid Listings"
 msgstr "HivePress Płatne ogłoszenia"
 
 #. Description of the plugin
-msgid "Charge users for adding listings."
-msgstr "Pobieraj opłatę za dodanie ogłoszeń."
+msgid "Charge users for adding, featuring and renewing listings."
+msgstr "Pobieraj opłatę za dodanie, promowanie i odświeżenie ogłoszeń."
 
 #. Author of the plugin
 msgid "HivePress"

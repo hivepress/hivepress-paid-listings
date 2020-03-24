@@ -1,6 +1,6 @@
 <?php
 /**
- * Listing submit package page template.
+ * Listing feature page template.
  *
  * @package HivePress\Templates
  */
@@ -13,11 +13,11 @@ use HivePress\Helpers as hp;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Listing submit package page template class.
+ * Listing feature page template class.
  *
- * @class Listing_Submit_Package_Page
+ * @class Listing_Feature_Page
  */
-class Listing_Submit_Package_Page extends Listing_Submit_Page {
+abstract class Listing_Feature_Page extends Page_Wide {
 
 	/**
 	 * Class constructor.
@@ -28,15 +28,7 @@ class Listing_Submit_Package_Page extends Listing_Submit_Page {
 		$args = hp\merge_trees(
 			[
 				'blocks' => [
-					'page_content' => [
-						'blocks' => [
-							'listing_packages' => [
-								'type'   => 'listing_packages',
-								'mode'   => 'submit',
-								'_order' => 10,
-							],
-						],
-					],
+					'page_content' => [],
 				],
 			],
 			$args
