@@ -93,7 +93,7 @@ final class Listing_Package extends Component {
 	public function update_user_packages( $listing_id, $new_status, $old_status ) {
 
 		// Check listing status.
-		if ( ! in_array( $old_status, [ 'auto-draft', 'draft' ], true ) && ! in_array( $new_status, [ 'pending', 'publish' ], true ) ) {
+		if ( ! in_array( $old_status, [ 'auto-draft', 'draft' ], true ) || ! in_array( $new_status, [ 'pending', 'publish' ], true ) ) {
 			return;
 		}
 
