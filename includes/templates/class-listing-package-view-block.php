@@ -63,6 +63,7 @@ class Listing_Package_View_Block extends Template {
 
 							'listing_package_content' => [
 								'type'       => 'container',
+								'optional'   => true,
 								'_order'     => 20,
 
 								'attributes' => [

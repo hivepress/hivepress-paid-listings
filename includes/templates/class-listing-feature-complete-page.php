@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @class Listing_Feature_Complete_Page
  */
-class Listing_Feature_Complete_Page extends Page_Wide {
+class Listing_Feature_Complete_Page extends Listing_Feature_Page {
 
 	/**
 	 * Class constructor.
