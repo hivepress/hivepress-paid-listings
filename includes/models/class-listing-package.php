@@ -38,6 +38,7 @@ class Listing_Package extends Post {
 					'description'   => [
 						'type'       => 'textarea',
 						'max_length' => 10240,
+						'html'       => true,
 						'_alias'     => 'post_content',
 					],
 
