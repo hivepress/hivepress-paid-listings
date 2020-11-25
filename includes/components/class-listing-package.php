@@ -265,7 +265,7 @@ final class Listing_Package extends Component {
 					if ( in_array( $item->get_product_id(), $package_product_ids, true ) ) {
 
 						// Get listing.
-						$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing', true, 'edit' ) );
+						$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing' ) );
 
 						if ( $listing ) {
 							if ( $listing->is_drafted() ) {
@@ -315,7 +315,7 @@ final class Listing_Package extends Component {
 				if ( $item->get_product_id() === $feature_product_id ) {
 
 					// Get listing.
-					$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing', true, 'edit' ) );
+					$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing' ) );
 
 					if ( $listing ) {
 						if ( ! $listing->is_featured() && in_array( $new_status, [ 'processing', 'completed' ], true ) ) {
@@ -377,7 +377,7 @@ final class Listing_Package extends Component {
 				if ( in_array( $item->get_product_id(), $package_product_ids, true ) ) {
 
 					// Get listing.
-					$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing', true, 'edit' ) );
+					$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing' ) );
 
 					if ( $listing ) {
 
@@ -411,7 +411,7 @@ final class Listing_Package extends Component {
 				if ( $item->get_product_id() === $feature_product_id ) {
 
 					// Get listing.
-					$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing', true, 'edit' ) );
+					$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing' ) );
 
 					if ( $listing && $listing->is_featured() ) {
 
