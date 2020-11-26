@@ -66,6 +66,11 @@ class Listing_Package extends Post {
 						'_external' => true,
 					],
 
+					'primary'       => [
+						'type'      => 'checkbox',
+						'_external' => true,
+					],
+
 					'sort_order'    => [
 						'type'      => 'number',
 						'min_value' => 0,

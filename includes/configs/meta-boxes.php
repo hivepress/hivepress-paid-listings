@@ -49,6 +49,13 @@ return [
 				'type'    => 'checkbox',
 				'_order'  => 40,
 			],
+
+			'primary'       => [
+				'label'   => esc_html_x( 'Recommended', 'package', 'hivepress-paid-listings' ),
+				'caption' => esc_html__( 'Recommend this package', 'hivepress-paid-listings' ),
+				'type'    => 'checkbox',
+				'_order'  => 50,
+			],
 		],
 	],
 ];
