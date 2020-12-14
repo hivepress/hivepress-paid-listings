@@ -30,6 +30,11 @@ final class Listing_Package extends Controller {
 		$args = hp\merge_arrays(
 			[
 				'routes' => [
+					'listing_package_select_page'     => [
+						'path'     => '/select-package/(?P<listing_package_id>\d+)',
+						'redirect' => [ $this, 'redirect_listing_package_select_page' ],
+					],
+
 					'listing_submit_package_page'     => [
 						'title'    => esc_html_x( 'Select Package', 'imperative', 'hivepress-paid-listings' ),
 						'base'     => 'listing_submit_page',
@@ -73,6 +78,65 @@ final class Listing_Package extends Controller {
 		);
 
 		parent::__construct( $args );
+	}
+
+	/**
+	 * Redirects listing package select page.
+	 *
+	 * @return mixed
+	 */
+	public function redirect_listing_package_select_page() {
+
+		// Get package.
+		$package = Models\Listing_Package::query()->get_by_id( hivepress()->request->get_param( 'listing_package_id' ) );
+
+		if ( ! $package || $package->get_status() !== 'publish' ) {
+			return true;
+		}
+
+		if ( hp\is_plugin_active( 'woocommerce' ) && $package->get_product__id() ) {
+
+			// Add product to cart.
+			WC()->cart->empty_cart();
+			WC()->cart->add_to_cart( $package->get_product__id() );
+
+			return wc_get_page_permalink( 'checkout' );
+		}
+
+		// Check authentication.
+		if ( ! is_user_logged_in() ) {
+			return hivepress()->router->get_url(
+				'user_login_page',
+				[
+					'redirect' => hivepress()->router->get_current_url(),
+				]
+			);
+		}
+
+		if ( ! Models\User_Listing_Package::query()->filter(
+			[
+				'user' => get_current_user_id(),
+			]
+		)->get_count() ) {
+
+			// Add user package.
+			$user_package = ( new Models\User_Listing_Package() )->fill(
+				array_merge(
+					$package->serialize(),
+					[
+						'user'    => get_current_user_id(),
+						'package' => $package->get_id(),
+						'default' => true,
+					]
+				)
+			);
+
+			if ( $user_package->save() ) {
+				return hivepress()->router->get_url( 'user_listing_packages_view_page' );
+			}
+		}
+
+		return true;
 	}
 
 	/**

@@ -162,6 +162,8 @@ class Listing_Packages extends Block {
 								'listing_package_id' => $package->get_id(),
 							]
 						);
+					} else {
+						$package_url = hivepress()->router->get_url( 'listing_package_select_page', [ 'listing_package_id' => $package->get_id() ] );
 					}
 
 					// Render package.

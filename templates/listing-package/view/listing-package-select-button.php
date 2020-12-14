@@ -2,7 +2,7 @@
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-if ( isset( $user_listing_package ) ) :
+if ( isset( $user_listing_package ) && ! $user_listing_package->get_submit_limit() ) :
 	?>
 	<button type="button" class="hp-listing-package__select-button hp-listing-package__button button" disabled>
 		<span><?php echo esc_html( hivepress()->translator->get_string( 'listing_limit_exceeded' ) ); ?></span>
