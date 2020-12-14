@@ -18,44 +18,44 @@ msgstr ""
 #: includes/configs/meta-boxes.php:21
 msgid "Choose a product that must be purchased in order to get this package."
 msgstr ""
-"Виберіть продукт, який повинен бути куплений для отримання пакету.\n"
+"Виберіть продукт, який повинен бути куплений для отримання пакету."
 
 #: includes/configs/post-types.php:21 includes/configs/post-types.php:27
 #: includes/controllers/class-listing-package.php:50
 msgid "Packages"
 msgstr ""
-"Пакети\n"
+"Пакети"
 
 #: includes/configs/post-types.php:22
 msgid "Package"
 msgstr ""
-"Пакет\n"
+"Пакет"
 
 #: includes/configs/post-types.php:23 includes/configs/post-types.php:26
 msgid "Add Package"
 msgstr ""
-"Додати пакет\n"
+"Додати пакет"
 
 #: includes/configs/post-types.php:24
 msgctxt "package"
 msgid "Add New"
 msgstr ""
-"Додати новий\n"
+"Додати новий"
 
 #: includes/configs/post-types.php:25
 msgid "Edit Package"
 msgstr ""
-"Редагувати пакет\n"
+"Редагувати пакет"
 
 #: includes/configs/post-types.php:28
 msgid "Search Packages"
 msgstr ""
-"Шукати пакети\n"
+"Шукати пакети"
 
 #: includes/configs/post-types.php:29 includes/configs/post-types.php:30
 msgid "No packages found."
 msgstr ""
-"Пакетів не знайдено.\n"
+"Пакетів не знайдено."
 
 #: includes/configs/settings.php:17
 msgid "Featuring"
@@ -80,12 +80,12 @@ msgstr "Пакети оголошень"
 #: includes/configs/strings.php:17
 msgid "Listing Limit"
 msgstr ""
-"Ліміт оголошень\n"
+"Ліміт оголошень"
 
 #: includes/configs/strings.php:18
 msgid "Limit Exceeded"
 msgstr ""
-"Ліміт перевищено\n"
+"Ліміт перевищено"
 
 #: includes/configs/strings.php:19
 #, php-format
@@ -117,12 +117,12 @@ msgstr "Виберіть пакет"
 #: templates/listing-package/view/listing-package-select-button.php:12
 msgid "Buy Package"
 msgstr ""
-"Купити пакет\n"
+"Купити пакет"
 
 #: templates/listing-package/view/listing-package-select-button.php:14
 msgid "Select Package"
 msgstr ""
-"Вибрати пакет\n"
+"Вибрати пакет"
 
 #: templates/listing/edit/block/listing-feature-link.php:8
 #: templates/listing/edit/page/listing-feature-link.php:7
@@ -146,8 +146,8 @@ msgstr ""
 #. Author of the plugin
 msgid "HivePress"
 msgstr ""
-"HivePress\n"
-"\n"
+"HivePress"
+""
 
 #. Author URI of the plugin
 msgid "https://hivepress.io/"

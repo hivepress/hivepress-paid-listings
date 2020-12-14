@@ -11,6 +11,8 @@ use HivePress\Helpers as hp;
 defined( 'ABSPATH' ) || exit;
 
 return [
+	'select_listing_package'                        => esc_html__( 'Select Package', 'hivepress-paid-listings' ),
+	'buy_listing_package'                           => esc_html__( 'Buy Package', 'hivepress-paid-listings' ),
 	'feature_listing'                               => esc_html__( 'Feature Listing', 'hivepress-paid-listings' ),
 	'listing_featured'                              => esc_html__( 'Listing Featured', 'hivepress-paid-listings' ),
 	'listing_packages'                              => esc_html__( 'Listing Packages', 'hivepress-paid-listings' ),

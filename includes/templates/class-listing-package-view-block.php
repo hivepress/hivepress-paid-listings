@@ -48,9 +48,27 @@ class Listing_Package_View_Block extends Template {
 
 								'blocks'     => [
 									'listing_package_name' => [
-										'type'   => 'part',
-										'path'   => 'listing-package/view/listing-package-name',
-										'_order' => 10,
+										'type'       => 'container',
+										'tag'        => 'h3',
+										'_order'     => 10,
+
+										'attributes' => [
+											'class' => [ 'hp-listing-package__name' ],
+										],
+
+										'blocks'     => [
+											'listing_package_name_text' => [
+												'type'   => 'part',
+												'path'   => 'listing-package/view/listing-package-name',
+												'_order' => 10,
+											],
+
+											'listing_package_primary_badge' => [
+												'type'   => 'part',
+												'path'   => 'listing-package/view/listing-package-primary-badge',
+												'_order' => 20,
+											],
+										],
 									],
 
 									'listing_package_price' => [

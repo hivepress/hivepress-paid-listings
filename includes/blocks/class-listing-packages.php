@@ -21,11 +21,66 @@ defined( 'ABSPATH' ) || exit;
 class Listing_Packages extends Block {
 
 	/**
+	 * Columns number.
+	 *
+	 * @var int
+	 */
+	protected $columns;
+
+	/**
+	 * Packages number.
+	 *
+	 * @var int
+	 */
+	protected $number;
+
+	/**
 	 * Template mode.
 	 *
 	 * @var string
 	 */
 	protected $mode = 'view';
+
+	/**
+	 * Class initializer.
+	 *
+	 * @param array $meta Block meta.
+	 */
+	public static function init( $meta = [] ) {
+		$meta = hp\merge_arrays(
+			[
+				'label'    => hivepress()->translator->get_string( 'listing_packages' ),
+
+				'settings' => [
+					'columns' => [
+						'label'    => hivepress()->translator->get_string( 'columns_number' ),
+						'type'     => 'select',
+						'default'  => 3,
+						'required' => true,
+						'_order'   => 10,
+
+						'options'  => [
+							2 => '2',
+							3 => '3',
+							4 => '4',
+						],
+					],
+
+					'number'  => [
+						'label'     => hivepress()->translator->get_string( 'items_number' ),
+						'type'      => 'number',
+						'min_value' => 1,
+						'default'   => 3,
+						'required'  => true,
+						'_order'    => 20,
+					],
+				],
+			],
+			$meta
+		);
+
+		parent::init( $meta );
+	}
 
 	/**
 	 * Renders block HTML.
@@ -107,6 +162,8 @@ class Listing_Packages extends Block {
 								'listing_package_id' => $package->get_id(),
 							]
 						);
+					} else {
+						$package_url = hivepress()->router->get_url( 'listing_package_select_page', [ 'listing_package_id' => $package->get_id() ] );
 					}
 
 					// Render package.

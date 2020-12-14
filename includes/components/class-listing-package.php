@@ -56,6 +56,8 @@ final class Listing_Package extends Component {
 			add_filter( 'hivepress/v1/menus/user_account', [ $this, 'alter_user_account_menu' ] );
 
 			// Alter templates.
+			add_filter( 'hivepress/v1/templates/listing_package_view_block/blocks', [ $this, 'alter_listing_package_view_blocks' ], 10, 2 );
+
 			add_filter( 'hivepress/v1/templates/listing_edit_block', [ $this, 'alter_listing_edit_block' ] );
 			add_filter( 'hivepress/v1/templates/listing_edit_page', [ $this, 'alter_listing_edit_page' ] );
 		}
@@ -265,7 +267,7 @@ final class Listing_Package extends Component {
 					if ( in_array( $item->get_product_id(), $package_product_ids, true ) ) {
 
 						// Get listing.
-						$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing', true, 'edit' ) );
+						$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing' ) );
 
 						if ( $listing ) {
 							if ( $listing->is_drafted() ) {
@@ -315,7 +317,7 @@ final class Listing_Package extends Component {
 				if ( $item->get_product_id() === $feature_product_id ) {
 
 					// Get listing.
-					$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing', true, 'edit' ) );
+					$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing' ) );
 
 					if ( $listing ) {
 						if ( ! $listing->is_featured() && in_array( $new_status, [ 'processing', 'completed' ], true ) ) {
@@ -377,7 +379,7 @@ final class Listing_Package extends Component {
 				if ( in_array( $item->get_product_id(), $package_product_ids, true ) ) {
 
 					// Get listing.
-					$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing', true, 'edit' ) );
+					$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing' ) );
 
 					if ( $listing ) {
 
@@ -411,7 +413,7 @@ final class Listing_Package extends Component {
 				if ( $item->get_product_id() === $feature_product_id ) {
 
 					// Get listing.
-					$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing', true, 'edit' ) );
+					$listing = Models\Listing::query()->get_by_id( $item->get_meta( 'hp_listing' ) );
 
 					if ( $listing && $listing->is_featured() ) {
 
@@ -476,6 +478,38 @@ final class Listing_Package extends Component {
 		}
 
 		return $menu;
+	}
+
+	/**
+	 * Alters listing package view blocks.
+	 *
+	 * @param array  $blocks Block arguments.
+	 * @param object $template Template object.
+	 * @return array
+	 */
+	public function alter_listing_package_view_blocks( $blocks, $template ) {
+
+		// Get package.
+		$package = $template->get_context( 'listing_package' );
+
+		if ( $package && $package->is_primary() ) {
+
+			// Add class.
+			$blocks = hp\merge_trees(
+				[ 'blocks' => $blocks ],
+				[
+					'blocks' => [
+						'listing_package_container' => [
+							'attributes' => [
+								'class' => [ 'hp-listing-package--primary' ],
+							],
+						],
+					],
+				]
+			)['blocks'];
+		}
+
+		return $blocks;
 	}
 
 	/**
