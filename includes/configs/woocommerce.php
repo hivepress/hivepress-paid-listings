@@ -13,8 +13,7 @@ defined( 'ABSPATH' ) || exit;
 return [
 	'item_meta' => [
 		'listing' => [
-			'type'      => 'number',
-			'min_value' => 1,
+			'type' => 'id',
 		],
 	],
 ];

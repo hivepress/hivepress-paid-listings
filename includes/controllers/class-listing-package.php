@@ -105,12 +105,7 @@ final class Listing_Package extends Controller {
 
 		// Check authentication.
 		if ( ! is_user_logged_in() ) {
-			return hivepress()->router->get_url(
-				'user_login_page',
-				[
-					'redirect' => hivepress()->router->get_current_url(),
-				]
-			);
+			return hivepress()->router->get_return_url( 'user_login_page' );
 		}
 
 		if ( ! Models\User_Listing_Package::query()->filter(
@@ -253,7 +248,7 @@ final class Listing_Package extends Controller {
 				}
 			}
 
-			return home_url( '/' );
+			return home_url();
 		}
 
 		return false;
@@ -270,7 +265,8 @@ final class Listing_Package extends Controller {
 		$package_ids = hivepress()->request->get_context( 'listing_package_ids' );
 
 		// Query packages.
-		query_posts(
+		hivepress()->request->set_context(
+			'post_query',
 			Models\Listing_Package::query()->filter(
 				[
 					'status' => 'publish',
@@ -304,7 +300,8 @@ final class Listing_Package extends Controller {
 		$package_ids = hivepress()->request->get_context( 'listing_package_ids' );
 
 		// Query packages.
-		query_posts(
+		hivepress()->request->set_context(
+			'post_query',
 			Models\Listing_Package::query()->filter(
 				[
 					'status' => 'publish',
@@ -336,12 +333,7 @@ final class Listing_Package extends Controller {
 
 		// Check authentication.
 		if ( ! is_user_logged_in() ) {
-			return hivepress()->router->get_url(
-				'user_login_page',
-				[
-					'redirect' => hivepress()->router->get_current_url(),
-				]
-			);
+			return hivepress()->router->get_return_url( 'user_login_page' );
 		}
 
 		// Check user packages.
@@ -378,12 +370,7 @@ final class Listing_Package extends Controller {
 
 		// Check authentication.
 		if ( ! is_user_logged_in() ) {
-			return hivepress()->router->get_url(
-				'user_login_page',
-				[
-					'redirect' => hivepress()->router->get_current_url(),
-				]
-			);
+			return hivepress()->router->get_return_url( 'user_login_page' );
 		}
 
 		// Get listing.
@@ -417,12 +404,7 @@ final class Listing_Package extends Controller {
 
 		// Check authentication.
 		if ( ! is_user_logged_in() ) {
-			return hivepress()->router->get_url(
-				'user_login_page',
-				[
-					'redirect' => hivepress()->router->get_current_url(),
-				]
-			);
+			return hivepress()->router->get_return_url( 'user_login_page' );
 		}
 
 		// Get listing.
