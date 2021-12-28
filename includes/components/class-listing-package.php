@@ -390,8 +390,6 @@ final class Listing_Package extends Component {
 							$redirect_url = hivepress()->router->get_url( 'listings_edit_page' );
 						} elseif ( $listing->get_status() === 'publish' ) {
 							$redirect_url = hivepress()->router->get_url( 'listing_view_page', [ 'listing_id' => $listing->get_id() ] );
-						} elseif (in_array( $order->get_status(), [ 'processing', 'completed' ], true ) ) {
-							$redirect_url = hivepress()->router->get_url( 'listing_submit_page' );
 						}
 
 						// Redirect page.
