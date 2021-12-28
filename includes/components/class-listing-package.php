@@ -155,7 +155,7 @@ final class Listing_Package extends Component {
 		}
 
 		// Delete user package.
-		if ( ! $user_package->is_default() && ! $user_package->get_submit_limit() ) {
+		if ( (! $user_package->is_default() || get_option('hp_listing_package_allow_free')) && ! $user_package->get_submit_limit() ) {
 			$user_package->delete();
 		}
 	}
