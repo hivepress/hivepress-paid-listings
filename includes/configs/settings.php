@@ -38,4 +38,25 @@ return [
 			],
 		],
 	],
+
+	'listing_packages' => [
+		'title'    => esc_html__('Packages', 'hivepress-paid-listings'),
+		'_order'   => 40,
+
+		'sections' => [
+			'features' => [
+				'title'  => esc_html__( 'Features', 'hivepress-paid-listings' ),
+				'_order' => 5,
+
+				'fields' => [
+					'listing_package_allow_free'  => [
+						'label'   => esc_html__('Allow free package', 'hivepress-paid-listings'),
+						'caption' => esc_html__( 'Check this option to allow re-selecting the free package', 'hivepress-paid-listings' ),
+						'type'    => 'checkbox',
+						'_order'  => 10,
+					],
+				],
+			],
+		],
+	],
 ];
