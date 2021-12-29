@@ -36,6 +36,21 @@ return [
 					],
 				],
 			],
+
+			'packages'  => [
+				'title'  => esc_html__( 'Packages', 'hivepress-paid-listings' ),
+				'_order' => 45,
+
+				'fields' => [
+					'listing_package_allow_free' => [
+						'label'       => esc_html__( 'Free Packages', 'hivepress-paid-listings' ),
+						'caption'     => esc_html__( 'Allow multiple free packages', 'hivepress-paid-listings' ),
+						'description' => esc_html__( 'Check this option to allow selecting free packages multiple times.', 'hivepress-paid-listings' ),
+						'type'        => 'checkbox',
+						'_order'      => 10,
+					],
+				],
+			],
 		],
 	],
 ];
