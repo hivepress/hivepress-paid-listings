@@ -3,7 +3,7 @@ Contributors: hivepress
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7785WBVGMNB44&source=url
 Tags: hivepress, paid listings, directory, listings, classifieds
 Requires at least: 5.0
-Tested up to: 5.8
+Tested up to: 5.9
 Requires PHP: 7.0
 Stable tag: 1.1.5
 License: GPLv3
