@@ -142,7 +142,13 @@ final class Listing_Package extends Component {
 			}
 
 			// Update listing.
-			$listing->save();
+			$listing->save(
+				[
+					'featured',
+					'featured_time',
+					'expired_time',
+				]
+			);
 		}
 
 		// Update user package.
@@ -281,7 +287,7 @@ final class Listing_Package extends Component {
 										'status'  => $status,
 										'drafted' => null,
 									]
-								)->save();
+								)->save( [ 'status', 'drafted' ] );
 							} elseif ( $listing->get_status() === 'draft' && $listing->get_expired_time() && $listing->get_expired_time() < time() ) {
 
 								// Get date.
@@ -295,7 +301,14 @@ final class Listing_Package extends Component {
 										'created_date_gmt' => get_gmt_from_date( $date ),
 										'expired_time'     => null,
 									]
-								)->save();
+								)->save(
+									[
+										'status',
+										'created_date',
+										'created_date_gmt',
+										'expired_time',
+									]
+								);
 							}
 						}
 
@@ -332,7 +345,7 @@ final class Listing_Package extends Component {
 								$listing->set_featured_time( time() + $featuring_period * DAY_IN_SECONDS );
 							}
 
-							$listing->save();
+							$listing->save( [ 'featured', 'featured_time' ] );
 						} elseif ( $listing->is_featured() && in_array( $new_status, [ 'failed', 'cancelled', 'refunded' ], true ) ) {
 
 							// Remove featured status.
@@ -341,7 +354,7 @@ final class Listing_Package extends Component {
 									'featured'      => false,
 									'featured_time' => null,
 								]
-							)->save();
+							)->save( [ 'featured', 'featured_time' ] );
 						}
 					}
 
