@@ -48,6 +48,12 @@ final class Listing_Package extends Component {
 			add_action( 'template_redirect', [ $this, 'redirect_order_page' ] );
 		}
 
+		if ( ! hp\is_rest() ) {
+
+			// Hide attributes.
+			add_filter( 'hivepress/v1/models/listing/attributes', [ $this, 'hide_attributes' ] );
+		}
+
 		if ( ! is_admin() ) {
 
 			// Alter menus.
@@ -581,5 +587,61 @@ final class Listing_Package extends Component {
 		}
 
 		return $template;
+	}
+
+	/**
+	 * Hides attributes.
+	 *
+	 * @param array $attributes Attribute arguments.
+	 * @return array
+	 */
+	public function hide_attributes( $attributes ) {
+		if ( ! current_user_can( 'edit_others_posts' ) ) {
+
+			// Get user packages ids.
+			$user_package_ids = [];
+
+			// Get user packages.
+			$user_packages = Models\User_Listing_Package::query()->filter(
+				[
+					'user'            => get_current_user_id(),
+					'submit_limit_gt' => 0,
+				]
+			)->get();
+
+			foreach ( $user_packages as $user_package ) {
+				$user_package_ids[] = $user_package->get_package__id();
+			}
+
+			// Get attributes ids.
+			$attribute_ids = [];
+
+			// Get packages.
+			$packages = Models\Listing_Package::query()->filter(
+				[
+					'id__not_in' => $user_package_ids,
+					'status'     => 'publish',
+				]
+			)->get();
+
+			foreach ( $packages as $package ) {
+				foreach ( $package->get_listing_attributes() as $package_attribute_id ) {
+					$attribute_ids[] = $package_attribute_id;
+				}
+			}
+
+			foreach ( $attributes as $attribute_name => $attribute ) {
+
+				// Get attribute ID.
+				$attribute_id = hp\get_array_value( $attribute, 'id' );
+
+				// Hide attribute.
+				if ( in_array( $attribute_id, $attribute_ids, true ) ) {
+					$attributes[ $attribute_name ]['editable'] = false;
+				}
+			}
+		}
+
+		return $attributes;
 	}
 }
