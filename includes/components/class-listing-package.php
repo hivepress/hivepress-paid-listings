@@ -163,7 +163,7 @@ final class Listing_Package extends Component {
 				$user_package->set_categories( array_intersect( $user_package->get_categories__id(), Models\Listing_Category::query()->get_ids() ) );
 			}
 
-			if ( 'trash' === $new_status ) {
+			if ( 'trash' === $new_status && ( $user_package->get_submit_limit() + 1 ) <= intval( $user_package->get_package__submit_limit() ) ) {
 				$user_package->set_submit_limit( $user_package->get_submit_limit() + 1 )->save();
 			} else {
 				$user_package->set_submit_limit( $user_package->get_submit_limit() - 1 )->save();
