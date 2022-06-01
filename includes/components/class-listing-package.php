@@ -604,8 +604,8 @@ final class Listing_Package extends Component {
 			// Get user packages.
 			$user_packages = Models\User_Listing_Package::query()->filter(
 				[
-					'user'            => get_current_user_id(),
-					'submit_limit_gt' => 0,
+					'user'              => get_current_user_id(),
+					'submit_limit__gte' => 1,
 				]
 			)->get();
 
