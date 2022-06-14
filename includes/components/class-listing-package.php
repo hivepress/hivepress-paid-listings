@@ -48,12 +48,6 @@ final class Listing_Package extends Component {
 			add_action( 'template_redirect', [ $this, 'redirect_order_page' ] );
 		}
 
-		if ( ! hp\is_rest() ) {
-
-			// Hide attributes.
-			add_filter( 'hivepress/v1/models/listing/attributes', [ $this, 'hide_attributes' ] );
-		}
-
 		if ( ! is_admin() ) {
 
 			// Alter menus.
@@ -66,6 +60,9 @@ final class Listing_Package extends Component {
 
 			add_filter( 'hivepress/v1/templates/listing_edit_block', [ $this, 'alter_listing_edit_block' ] );
 			add_filter( 'hivepress/v1/templates/listing_edit_page', [ $this, 'alter_listing_edit_page' ] );
+
+			// Alter forms.
+			add_filter( 'hivepress/v1/forms/listing_update', [ $this, 'alter_listing_update_form' ], 200 );
 		}
 
 		parent::__construct( $args );
@@ -163,11 +160,16 @@ final class Listing_Package extends Component {
 				$user_package->set_categories( array_intersect( $user_package->get_categories__id(), Models\Listing_Category::query()->get_ids() ) );
 			}
 
+			// Get package limit.
+			$limit = $user_package->get_submit_limit();
+
 			if ( 'trash' === $new_status && ( $user_package->get_submit_limit() + 1 ) <= intval( $user_package->get_package__submit_limit() ) ) {
-				$user_package->set_submit_limit( $user_package->get_submit_limit() + 1 )->save();
+				$limit++;
 			} else {
-				$user_package->set_submit_limit( $user_package->get_submit_limit() - 1 )->save();
+				$limit--;
 			}
+
+			$user_package->set_submit_limit( $limit )->save();
 		}
 
 		// Delete user package.
@@ -594,58 +596,58 @@ final class Listing_Package extends Component {
 	}
 
 	/**
-	 * Hides attributes.
+	 * Alters listing update form.
 	 *
-	 * @param array $attributes Attribute arguments.
+	 * @param array $form Form arguments.
 	 * @return array
 	 */
-	public function hide_attributes( $attributes ) {
-		if ( ! current_user_can( 'edit_others_posts' ) ) {
+	public function alter_listing_update_form( $form ) {
 
-			// Get user packages ids.
-			$user_package_ids = [];
+		// Check permissions.
+		if ( current_user_can( 'edit_others_posts' ) ) {
+			return $form;
+		}
 
-			// Get user packages.
-			$user_packages = Models\User_Listing_Package::query()->filter(
-				[
-					'user'              => get_current_user_id(),
-					'submit_limit__gte' => 1,
-				]
-			)->get();
+		// Get user packages ids.
+		$user_package_ids = [];
 
-			foreach ( $user_packages as $user_package ) {
-				$user_package_ids[] = $user_package->get_package__id();
-			}
+		// Get user packages.
+		$user_packages = Models\User_Listing_Package::query()->filter(
+			[
+				'user'              => get_current_user_id(),
+				'submit_limit__gte' => 1,
+			]
+		)->get();
 
-			// Get attributes ids.
-			$attribute_ids = [];
+		foreach ( $user_packages as $user_package ) {
+			$user_package_ids[] = $user_package->get_package__id();
+		}
 
-			// Get packages.
-			$packages = Models\Listing_Package::query()->filter(
-				[
-					'id__not_in' => $user_package_ids,
-					'status'     => 'publish',
-				]
-			)->get();
+		// Get attributes ids.
+		$attribute_ids = [];
 
-			foreach ( $packages as $package ) {
-				foreach ( $package->get_listing_attributes() as $package_attribute_id ) {
-					$attribute_ids[] = $package_attribute_id;
-				}
-			}
+		// Get packages.
+		$packages = Models\Listing_Package::query()->filter(
+			[
+				'id__not_in' => $user_package_ids,
+				'status'     => 'publish',
+			]
+		)->get();
 
-			foreach ( $attributes as $attribute_name => $attribute ) {
-
-				// Get attribute ID.
-				$attribute_id = hp\get_array_value( $attribute, 'id' );
-
-				// Hide attribute.
-				if ( in_array( $attribute_id, $attribute_ids, true ) ) {
-					$attributes[ $attribute_name ]['editable'] = false;
-				}
+		foreach ( $packages as $package ) {
+			foreach ( $package->get_listing_attributes() as $package_attribute_id ) {
+				$attribute_ids[] = $package_attribute_id;
 			}
 		}
 
-		return $attributes;
+		foreach ( hivepress()->attribute->get_attributes( 'listing' ) as $attribute_name => $attribute ) {
+
+			// Hide field.
+			if ( isset( $form['fields'][ $attribute_name ] ) && in_array( hp\get_array_value( $attribute, 'id' ), $attribute_ids, true ) ) {
+				unset( $form['fields'][ $attribute_name ] );
+			}
+		}
+
+		return $form;
 	}
 }
