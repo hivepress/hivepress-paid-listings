@@ -35,6 +35,12 @@ class Listing_Submit_Package_Page extends Listing_Submit_Page {
 								'mode'   => 'submit',
 								'_order' => 10,
 							],
+
+							'package_actions'  => [
+								'type'   => 'part',
+								'path'   => 'listing/submit/listing-change-details-link',
+								'_order' => 20,
+							],
 						],
 					],
 				],
