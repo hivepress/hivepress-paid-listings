@@ -25,7 +25,7 @@ class Listing_Packages extends Block {
 	 *
 	 * @var int
 	 */
-	protected $columns;
+	protected $columns = 4;
 
 	/**
 	 * Packages number.
@@ -55,7 +55,7 @@ class Listing_Packages extends Block {
 					'columns' => [
 						'label'    => hivepress()->translator->get_string( 'columns_number' ),
 						'type'     => 'select',
-						'default'  => 3,
+						'default'  => 4,
 						'required' => true,
 						'_order'   => 10,
 
@@ -130,11 +130,14 @@ class Listing_Packages extends Block {
 			}
 
 			// Get column width.
-			$columns      = absint( $query->found_posts );
-			$column_width = 3;
+			$column_width = hp\get_column_width( $this->columns );
 
-			if ( $columns < 4 ) {
-				$column_width = round( 12 / $columns );
+			if ( isset( $this->context['listing_packages'] ) ) {
+				$columns = absint( $query->found_posts );
+
+				if ( $columns < 4 ) {
+					$column_width = round( 12 / $columns );
+				}
 			}
 
 			// Render packages.
