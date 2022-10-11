@@ -95,7 +95,7 @@ final class Listing_Package extends Component {
 	public function update_user_packages( $listing_id, $new_status, $old_status ) {
 
 		// Check listing status.
-		if ( ! in_array( $old_status, [ 'auto-draft', 'draft', 'pending' ], true ) || ! in_array( $new_status, [ 'pending', 'publish', 'trash' ], true ) ) {
+		if ( ! in_array( $old_status, [ 'auto-draft', 'draft' ], true ) || ! in_array( $new_status, [ 'pending', 'publish' ], true ) ) {
 			return;
 		}
 
@@ -157,16 +157,7 @@ final class Listing_Package extends Component {
 				$user_package->set_categories( array_intersect( $user_package->get_categories__id(), Models\Listing_Category::query()->get_ids() ) );
 			}
 
-			// Get package limit.
-			$limit = $user_package->get_submit_limit();
-
-			if ( 'trash' === $new_status && ( $user_package->get_submit_limit() + 1 ) <= intval( $user_package->get_package__submit_limit() ) ) {
-				$limit++;
-			} else {
-				$limit--;
-			}
-
-			$user_package->set_submit_limit( $limit )->save();
+			$user_package->set_submit_limit( $user_package->get_submit_limit() - 1 )->save();
 		}
 
 		// Delete user package.
