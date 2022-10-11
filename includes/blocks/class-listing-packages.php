@@ -25,7 +25,7 @@ class Listing_Packages extends Block {
 	 *
 	 * @var int
 	 */
-	protected $columns;
+	protected $columns = 4;
 
 	/**
 	 * Packages number.
@@ -133,8 +133,7 @@ class Listing_Packages extends Block {
 			$column_width = hp\get_column_width( $this->columns );
 
 			if ( isset( $this->context['listing_packages'] ) ) {
-				$column_width = 3;
-				$columns      = absint( $query->found_posts );
+				$columns = absint( $query->found_posts );
 
 				if ( $columns < 4 ) {
 					$column_width = round( 12 / $columns );
