@@ -28,56 +28,56 @@ class Listing_Package extends Post {
 		$args = hp\merge_arrays(
 			[
 				'fields' => [
-					'name'               => [
+					'name'          => [
 						'type'       => 'text',
 						'max_length' => 256,
 						'required'   => true,
 						'_alias'     => 'post_title',
 					],
 
-					'description'        => [
+					'description'   => [
 						'type'       => 'textarea',
 						'max_length' => 10240,
 						'html'       => true,
 						'_alias'     => 'post_content',
 					],
 
-					'status'             => [
+					'status'        => [
 						'type'       => 'text',
 						'max_length' => 128,
 						'_alias'     => 'post_status',
 					],
 
-					'submit_limit'       => [
+					'submit_limit'  => [
 						'type'      => 'number',
 						'min_value' => 1,
 						'required'  => true,
 						'_external' => true,
 					],
 
-					'expire_period'      => [
+					'expire_period' => [
 						'type'      => 'number',
 						'min_value' => 1,
 						'_external' => true,
 					],
 
-					'featured'           => [
+					'featured'      => [
 						'type'      => 'checkbox',
 						'_external' => true,
 					],
 
-					'primary'            => [
+					'primary'       => [
 						'type'      => 'checkbox',
 						'_external' => true,
 					],
 
-					'sort_order'         => [
+					'sort_order'    => [
 						'type'      => 'number',
 						'min_value' => 0,
 						'_alias'    => 'menu_order',
 					],
 
-					'categories'         => [
+					'categories'    => [
 						'type'        => 'select',
 						'options'     => 'terms',
 						'option_args' => [ 'taxonomy' => 'hp_listing_category' ],
@@ -86,18 +86,10 @@ class Listing_Package extends Post {
 						'_relation'   => 'many_to_many',
 					],
 
-					'product'            => [
+					'product'       => [
 						'type'      => 'number',
 						'min_value' => 1,
 						'_alias'    => 'post_parent',
-					],
-
-					'listing_attributes' => [
-						'type'        => 'select',
-						'options'     => 'posts',
-						'option_args' => [ 'post_type' => 'hp_listing_attribute' ],
-						'multiple'    => true,
-						'_external'   => true,
 					],
 				],
 			],

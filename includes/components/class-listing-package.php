@@ -60,9 +60,6 @@ final class Listing_Package extends Component {
 
 			add_filter( 'hivepress/v1/templates/listing_edit_block', [ $this, 'alter_listing_edit_block' ] );
 			add_filter( 'hivepress/v1/templates/listing_edit_page', [ $this, 'alter_listing_edit_page' ] );
-
-			// Alter forms.
-			add_filter( 'hivepress/v1/forms/listing_update', [ $this, 'alter_listing_update_form' ], 200 );
 		}
 
 		parent::__construct( $args );
@@ -593,61 +590,5 @@ final class Listing_Package extends Component {
 		}
 
 		return $template;
-	}
-
-	/**
-	 * Alters listing update form.
-	 *
-	 * @param array $form Form arguments.
-	 * @return array
-	 */
-	public function alter_listing_update_form( $form ) {
-
-		// Check permissions.
-		if ( current_user_can( 'edit_others_posts' ) ) {
-			return $form;
-		}
-
-		// Get user packages ids.
-		$user_package_ids = [];
-
-		// Get user packages.
-		$user_packages = Models\User_Listing_Package::query()->filter(
-			[
-				'user'              => get_current_user_id(),
-				'submit_limit__gte' => 1,
-			]
-		)->get();
-
-		foreach ( $user_packages as $user_package ) {
-			$user_package_ids[] = $user_package->get_package__id();
-		}
-
-		// Get attributes ids.
-		$attribute_ids = [];
-
-		// Get packages.
-		$packages = Models\Listing_Package::query()->filter(
-			[
-				'id__not_in' => $user_package_ids,
-				'status'     => 'publish',
-			]
-		)->get();
-
-		foreach ( $packages as $package ) {
-			foreach ( $package->get_listing_attributes() as $package_attribute_id ) {
-				$attribute_ids[] = $package_attribute_id;
-			}
-		}
-
-		foreach ( hivepress()->attribute->get_attributes( 'listing' ) as $attribute_name => $attribute ) {
-
-			// Hide field.
-			if ( isset( $form['fields'][ $attribute_name ] ) && in_array( hp\get_array_value( $attribute, 'id' ), $attribute_ids, true ) ) {
-				unset( $form['fields'][ $attribute_name ] );
-			}
-		}
-
-		return $form;
 	}
 }
