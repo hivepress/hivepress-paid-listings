@@ -14,7 +14,7 @@ Charge users for adding, featuring and renewing listings.
 
 HivePress Paid Listings is an extension for [HivePress](https://wordpress.org/plugins/hivepress/) plugin. It allows you to charge users for adding, featuring and renewing listings.
 
-[Demo](https://listinghive.hivepress.io/) | [Docs](https://help.hivepress.io/category/42-paid-listings) | [Support](https://community.hivepress.io/?utm_medium=referral&utm_source=wordpress.org)
+[Demo](https://listinghive.hivepress.io/) | [Docs](https://help.hivepress.io/category/42-paid-listings) | [Support](https://community.hivepress.io/)
 
 == Changelog ==
 
