@@ -30,15 +30,15 @@ class Listing_Submit_Package_Page extends Listing_Submit_Page {
 				'blocks' => [
 					'page_content' => [
 						'blocks' => [
-							'listing_packages' => [
+							'listing_packages'            => [
 								'type'   => 'listing_packages',
 								'mode'   => 'submit',
 								'_order' => 10,
 							],
 
-							'package_actions'  => [
+							'listing_details_change_link' => [
 								'type'   => 'part',
-								'path'   => 'listing/submit/listing-change-details-link',
+								'path'   => 'listing/submit/listing-details-change-link',
 								'_order' => 20,
 							],
 						],

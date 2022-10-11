@@ -140,9 +140,6 @@ final class Listing_Package extends Controller {
 	 * @return mixed
 	 */
 	public function redirect_listing_packages_view_page() {
-		if ( 'change' === hp\get_array_value( $_GET, 'details' ) ) {
-			return esc_url( hivepress()->router->get_url( 'listing_submit_details_page' ) );
-		}
 
 		// Get listing.
 		$listing = hivepress()->request->get_context( 'listing' );
@@ -280,28 +277,14 @@ final class Listing_Package extends Controller {
 			->get_args()
 		);
 
-		// Set context.
-		$context = [
-			'listing_packages' => [],
-		];
-
-		// Get listing.
-		$listing = hivepress()->request->get_context( 'listing' );
-
-		if ( $listing ) {
-			$listing = Models\Listing::query()->get_by_id( $listing->get_id() );
-
-			if ( $listing ) {
-				$context['listing_status'] = $listing->get_status();
-			}
-		}
-
 		// Render template.
 		return ( new Blocks\Template(
 			[
 				'template' => 'listing_submit_package_page',
 
-				'context'  => $context,
+				'context'  => [
+					'listing_packages' => [],
+				],
 			]
 		) )->render();
 	}
