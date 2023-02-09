@@ -245,6 +245,13 @@ final class Listing_Package extends Component {
 
 			if ( in_array( $new_status, [ 'processing', 'completed' ], true ) ) {
 
+				// Is order was paid.
+				$order_paid = get_post_meta( $order_id, 'hp_listing_packages_paid', true );
+
+				if ( $order_paid ) {
+					return;
+				}
+
 				// Get package IDs.
 				$package_ids = array_map(
 					function( $user_package ) {
@@ -315,6 +322,9 @@ final class Listing_Package extends Component {
 						break;
 					}
 				}
+
+				// Save order was paid.
+				update_post_meta( $order_id, 'hp_listing_packages_paid', true );
 			} elseif ( in_array( $new_status, [ 'failed', 'cancelled', 'refunded' ], true ) ) {
 
 				// Delete user packages.
