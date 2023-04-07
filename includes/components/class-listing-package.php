@@ -95,7 +95,7 @@ final class Listing_Package extends Component {
 	public function update_user_packages( $listing_id, $new_status, $old_status ) {
 
 		// Check listing status.
-		if ( ! in_array( $old_status, [ 'auto-draft', 'draft' ], true ) || ! in_array( $new_status, [ 'pending', 'publish' ], true ) ) {
+		if ( ! in_array( $old_status, [ 'auto-draft', 'draft', 'pending' ], true ) || ! in_array( $new_status, [ 'pending', 'publish' ], true ) ) {
 			return;
 		}
 
@@ -288,7 +288,7 @@ final class Listing_Package extends Component {
 										'drafted' => null,
 									]
 								)->save( [ 'status', 'drafted' ] );
-							} elseif ( $listing->get_status() === 'draft' && $listing->get_expired_time() && $listing->get_expired_time() < time() ) {
+							} elseif ( in_array( $listing->get_status(), [ 'draft', 'pending' ] ) && $listing->get_expired_time() && $listing->get_expired_time() < time() ) {
 
 								// Get date.
 								$date = current_time( 'mysql' );
