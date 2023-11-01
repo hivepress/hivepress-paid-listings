@@ -62,6 +62,9 @@ final class Listing_Package extends Component {
 			add_filter( 'hivepress/v1/templates/listing_edit_page', [ $this, 'alter_listing_edit_page' ] );
 		}
 
+		// Update listing package categories.
+		add_action( 'hivepress/v1/models/listing_package/update_categories', [ $this, 'update_package_categories' ], 10, 2 );
+
 		parent::__construct( $args );
 	}
 
@@ -581,5 +584,37 @@ final class Listing_Package extends Component {
 		}
 
 		return $template;
+	}
+
+	/**
+	 * Update listing package categories.
+	 *
+	 * @param int   $package_id Listing package ID.
+	 * @param array $value Listing package categories ID.
+	 */
+	public function update_package_categories( $package_id, $value ) {
+		if ( ! $value ) {
+			return;
+		}
+
+		// Remove action.
+		remove_action( 'hivepress/v1/models/listing_package/update_categories', [ $this, 'update_package_categories' ], 10, 2 );
+
+		// Set parent and child categories.
+		$categories = (array) $value;
+
+		foreach ( (array) $value as $category ) {
+			$categories = array_merge( $categories, get_term_children( $category, 'hp_listing_category' ) );
+		}
+
+		// Get package.
+		$package = Models\Listing_Package::query()->get_by_id( $package_id );
+
+		if ( ! $package ) {
+			return;
+		}
+
+		// Update package categories.
+		$package->set_categories( $categories )->save_categories();
 	}
 }
