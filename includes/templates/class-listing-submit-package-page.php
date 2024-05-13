@@ -20,6 +20,22 @@ defined( 'ABSPATH' ) || exit;
 class Listing_Submit_Package_Page extends Listing_Submit_Page {
 
 	/**
+	 * Class initializer.
+	 *
+	 * @param array $meta Class meta values.
+	 */
+	public static function init( $meta = [] ) {
+		$meta = hp\merge_arrays(
+			[
+				'label' => hivepress()->translator->get_string( 'listing_packages' ),
+			],
+			$meta
+		);
+
+		parent::init( $meta );
+	}
+
+	/**
 	 * Class constructor.
 	 *
 	 * @param array $args Template arguments.
@@ -39,6 +55,7 @@ class Listing_Submit_Package_Page extends Listing_Submit_Page {
 							'listing_details_change_link' => [
 								'type'   => 'part',
 								'path'   => 'listing/submit/listing-details-change-link',
+								'_label' => hivepress()->translator->get_string( 'listing_details_change_link' ),
 								'_order' => 20,
 							],
 						],
