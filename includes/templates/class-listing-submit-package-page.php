@@ -55,7 +55,7 @@ class Listing_Submit_Package_Page extends Listing_Submit_Page {
 							'listing_details_change_link' => [
 								'type'   => 'part',
 								'path'   => 'listing/submit/listing-details-change-link',
-								'_label' => hivepress()->translator->get_string( 'listing_details_change_link' ),
+							'_label' => esc_html__( 'Listing Details Change Link', 'hivepress-paid-listings' ),
 								'_order' => 20,
 							],
 						],
