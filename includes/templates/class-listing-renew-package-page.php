@@ -27,7 +27,7 @@ class Listing_Renew_Package_Page extends Listing_Renew_Page {
 	public static function init( $meta = [] ) {
 		$meta = hp\merge_arrays(
 			[
-				'label' => hivepress()->translator->get_string( 'listing_packages' ),
+				'label' => hivepress()->translator->get_string( 'listing_packages' ) . ' (' . esc_html__( 'Renew Listings', 'hivepress-paid-listings' ) . ')',
 			],
 			$meta
 		);
