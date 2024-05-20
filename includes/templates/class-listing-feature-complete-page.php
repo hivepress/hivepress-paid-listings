@@ -20,6 +20,22 @@ defined( 'ABSPATH' ) || exit;
 class Listing_Feature_Complete_Page extends Listing_Feature_Page {
 
 	/**
+	 * Class initializer.
+	 *
+	 * @param array $meta Class meta values.
+	 */
+	public static function init( $meta = [] ) {
+		$meta = hp\merge_arrays(
+			[
+				'label' => hivepress()->translator->get_string( 'feature_listing' ) . ' (' . hivepress()->translator->get_string( 'completed' ) . ')',
+			],
+			$meta
+		);
+
+		parent::init( $meta );
+	}
+
+	/**
 	 * Class constructor.
 	 *
 	 * @param array $args Template arguments.
@@ -33,6 +49,7 @@ class Listing_Feature_Complete_Page extends Listing_Feature_Page {
 							'listing_complete_message' => [
 								'type'   => 'part',
 								'path'   => 'listing/feature/listing-complete-message',
+								'_label' => hivepress()->translator->get_string( 'message' ),
 								'_order' => 10,
 							],
 						],
