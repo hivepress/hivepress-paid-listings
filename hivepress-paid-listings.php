@@ -2,7 +2,7 @@
 /**
  * Plugin Name: HivePress Paid Listings
  * Description: Charge users for adding, featuring and renewing listings.
- * Version: 1.1.7
+ * Version: 1.1.8
  * Author: HivePress
  * Author URI: https://hivepress.io/
  * Text Domain: hivepress-paid-listings
