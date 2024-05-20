@@ -20,6 +20,22 @@ defined( 'ABSPATH' ) || exit;
 class Listing_Renew_Package_Page extends Listing_Renew_Page {
 
 	/**
+	 * Class initializer.
+	 *
+	 * @param array $meta Class meta values.
+	 */
+	public static function init( $meta = [] ) {
+		$meta = hp\merge_arrays(
+			[
+				'label' => hivepress()->translator->get_string( 'listing_packages' ) . ' (' . hivepress()->translator->get_string( 'renew_listing' ) . ')',
+			],
+			$meta
+		);
+
+		parent::init( $meta );
+	}
+
+	/**
 	 * Class constructor.
 	 *
 	 * @param array $args Template arguments.

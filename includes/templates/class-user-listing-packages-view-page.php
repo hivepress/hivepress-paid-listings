@@ -20,6 +20,22 @@ defined( 'ABSPATH' ) || exit;
 class User_Listing_Packages_View_Page extends User_Account_Page {
 
 	/**
+	 * Class initializer.
+	 *
+	 * @param array $meta Class meta values.
+	 */
+	public static function init( $meta = [] ) {
+		$meta = hp\merge_arrays(
+			[
+				'label' => hivepress()->translator->get_string( 'listing_packages' ) . ' (' . hivepress()->translator->get_string( 'user' ) . ')',
+			],
+			$meta
+		);
+
+		parent::init( $meta );
+	}
+
+	/**
 	 * Class constructor.
 	 *
 	 * @param array $args Template arguments.
@@ -32,6 +48,7 @@ class User_Listing_Packages_View_Page extends User_Account_Page {
 						'blocks' => [
 							'user_listing_packages' => [
 								'type'   => 'user_listing_packages',
+								'_label' => hivepress()->translator->get_string( 'listing_packages' ) . ' (' . hivepress()->translator->get_string( 'user' ) . ')',
 								'_order' => 10,
 							],
 						],
