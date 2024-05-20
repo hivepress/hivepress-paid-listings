@@ -243,7 +243,7 @@ final class Listing_Package extends Component {
 				]
 			);
 
-			if ( in_array( $new_status, [ 'processing', 'completed' ], true ) ) {
+			if ( in_array( $new_status, [ 'processing', 'completed' ], true ) && 'processing' !== $old_status ) {
 
 				// Get package IDs.
 				$package_ids = array_map(
