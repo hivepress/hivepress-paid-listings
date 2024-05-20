@@ -27,7 +27,7 @@ class User_Listing_Packages_View_Page extends User_Account_Page {
 	public static function init( $meta = [] ) {
 		$meta = hp\merge_arrays(
 			[
-				'label' => esc_html__( 'User Packages', 'hivepress-paid-listings' ),
+				'label' => hivepress()->translator->get_string( 'listing_packages' ) . ' (' . hivepress()->translator->get_string( 'user' ) . ')',
 			],
 			$meta
 		);
@@ -48,7 +48,7 @@ class User_Listing_Packages_View_Page extends User_Account_Page {
 						'blocks' => [
 							'user_listing_packages' => [
 								'type'   => 'user_listing_packages',
-								'_label' => esc_html__( 'User Packages', 'hivepress-paid-listings' ),
+								'_label' => hivepress()->translator->get_string( 'listing_packages' ) . ' (' . hivepress()->translator->get_string( 'user' ) . ')',
 								'_order' => 10,
 							],
 						],
