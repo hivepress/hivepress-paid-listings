@@ -95,7 +95,7 @@ final class Listing_Package extends Component {
 	public function update_user_packages( $listing_id, $new_status, $old_status ) {
 
 		// Check listing status.
-		if ( ! in_array( $old_status, [ 'auto-draft', 'draft', 'pending' ], true ) || ! in_array( $new_status, [ 'pending', 'publish' ], true ) ) {
+		if ( ! in_array( $old_status, [ 'auto-draft', 'draft' ], true ) || ! in_array( $new_status, [ 'pending', 'publish' ], true ) ) {
 			return;
 		}
 
@@ -120,6 +120,15 @@ final class Listing_Package extends Component {
 
 		if ( empty( $user_packages ) ) {
 			return;
+		}
+
+		if ( 'draft' === $old_status && 'pending' === $new_status && $listing->get_expired_time() && $listing->get_expired_time() < time() ) {
+
+			// Add flag.
+			update_post_meta( $listing_id, 'hp_moderated', true );
+
+			// Change listing status.
+			$listing->set_status( 'draft' )->save_status();
 		}
 
 		// Get the first package.
@@ -288,7 +297,14 @@ final class Listing_Package extends Component {
 										'drafted' => null,
 									]
 								)->save( [ 'status', 'drafted' ] );
-							} elseif ( in_array( $listing->get_status(), [ 'draft', 'pending' ] ) && $listing->get_expired_time() && $listing->get_expired_time() < time() ) {
+							} elseif ( get_post_meta( $listing->get_id(), 'hp_moderated', true ) ) {
+
+								// Remove flag.
+								delete_post_meta( $listing->get_id(), 'hp_moderated' );
+
+								// Change listing status.
+								$listing->set_status( 'pending' )->save_status();
+							} elseif ( $listing->get_status() === 'draft' && $listing->get_expired_time() && $listing->get_expired_time() < time() ) {
 
 								// Get date.
 								$date = current_time( 'mysql' );
