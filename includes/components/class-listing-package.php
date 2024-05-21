@@ -122,6 +122,15 @@ final class Listing_Package extends Component {
 			return;
 		}
 
+		if ( 'draft' === $old_status && 'pending' === $new_status && $listing->get_expired_time() && $listing->get_expired_time() < time() ) {
+
+			// Add flag.
+			update_post_meta( $listing_id, 'hp_moderated', true );
+
+			// Change listing status.
+			$listing->set_status( 'draft' )->save_status();
+		}
+
 		// Get the first package.
 		$user_package = reset( $user_packages );
 
@@ -288,6 +297,13 @@ final class Listing_Package extends Component {
 										'drafted' => null,
 									]
 								)->save( [ 'status', 'drafted' ] );
+							} elseif ( get_post_meta( $listing->get_id(), 'hp_moderated', true ) ) {
+
+								// Remove flag.
+								delete_post_meta( $listing->get_id(), 'hp_moderated' );
+
+								// Change listing status.
+								$listing->set_status( 'pending' )->save_status();
 							} elseif ( $listing->get_status() === 'draft' && $listing->get_expired_time() && $listing->get_expired_time() < time() ) {
 
 								// Get date.
