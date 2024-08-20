@@ -106,7 +106,7 @@ final class Listing_Package extends Component {
 		if ( 'draft' === $old_status ) {
 			if ( 'pending' === $new_status && $listing->get_expired_time() && $listing->get_expired_time() < time() ) {
 				update_post_meta( $listing_id, 'hp_moderated', 1 );
-				=
+
 				$listing->set_status( 'draft' )->save_status();
 
 				return;
