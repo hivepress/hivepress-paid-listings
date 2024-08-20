@@ -102,6 +102,21 @@ final class Listing_Package extends Component {
 		// Get listing.
 		$listing = Models\Listing::query()->get_by_id( $listing_id );
 
+		// Update listing status.
+		if ( 'draft' === $old_status ) {
+			if ( 'pending' === $new_status && $listing->get_expired_time() && $listing->get_expired_time() < time() ) {
+				update_post_meta( $listing_id, 'hp_moderated', 1 );
+				=
+				$listing->set_status( 'draft' )->save_status();
+
+				return;
+			} elseif ( 'publish' === $new_status && get_post_meta( $listing_id, 'hp_moderated', true ) ) {
+				delete_post_meta( $listing_id, 'hp_moderated' );
+
+				$listing->set_status( 'pending' )->save_status();
+			}
+		}
+
 		// Get user packages.
 		$user_packages = Models\User_Listing_Package::query()->filter(
 			[
