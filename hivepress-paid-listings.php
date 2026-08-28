@@ -2,7 +2,9 @@
 /**
  * Plugin Name: HivePress Paid Listings
  * Description: Charge users for adding, featuring and renewing listings.
- * Version: 1.1.9
+ * Requires at least: 5.0
+ * Requires PHP: 7.4
+ * Version: 1.1.10
  * Author: HivePress
  * Author URI: https://hivepress.io/
  * Text Domain: hivepress-paid-listings
@@ -17,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
 // Register extension directory.
 add_filter(
 	'hivepress/v1/extensions',
-	function( $extensions ) {
+	function ( $extensions ) {
 		$extensions[] = __DIR__;
 
 		return $extensions;
