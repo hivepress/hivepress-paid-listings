@@ -4,7 +4,7 @@
  * Description: Charge users for adding, featuring and renewing listings.
  * Requires at least: 5.0
  * Requires PHP: 7.4
- * Version: 1.1.9
+ * Version: 1.1.10
  * Author: HivePress
  * Author URI: https://hivepress.io/
  * Text Domain: hivepress-paid-listings
