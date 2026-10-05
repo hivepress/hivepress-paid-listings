@@ -49,6 +49,7 @@ class Listing_Renew_Package_Page extends Listing_Renew_Page {
 							'listing_packages' => [
 								'type'   => 'listing_packages',
 								'mode'   => 'renew',
+								'_label' => hivepress()->translator->get_string( 'listing_packages' ),
 								'_order' => 10,
 							],
 						],

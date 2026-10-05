@@ -2,9 +2,9 @@
 Contributors: hivepress
 Tags: hivepress, paid listings, directory, listings, classifieds
 Requires at least: 5.0
-Tested up to: 6.6
-Requires PHP: 7.0
-Stable tag: 1.1.9
+Tested up to: 7.1
+Requires PHP: 7.4
+Stable tag: 1.1.10
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -14,7 +14,9 @@ Charge users for adding, featuring and renewing listings.
 
 HivePress Paid Listings is an extension for [HivePress](https://wordpress.org/plugins/hivepress/) plugin. It allows you to charge users for adding, featuring and renewing listings.
 
-[Demo](https://listinghive.hivepress.io/) | [Docs](https://help.hivepress.io/category/42-paid-listings) | [Support](https://community.hivepress.io/)
+**Please note that this extension is no longer in active development. If you need similar functionality, please consider [this one](https://hivepress.io/extensions/memberships/?utm_medium=referral&utm_source=wordpress.org) as a replacement.**
+
+[Demo](https://listinghive.hivepress.io/) | [Docs](https://help.hivepress.io/) | [Support](https://community.hivepress.io/)
 
 == Changelog ==
 

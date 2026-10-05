@@ -77,6 +77,11 @@ final class Listing_Package extends Controller {
 			$args
 		);
 
+		// Remove routes that conflict with Memberships.
+		if ( ! hp\is_plugin_active( 'woocommerce' ) || ! get_option( 'hp_product_listing_feature' ) ) {
+			unset( $args['routes']['listing_feature_page'], $args['routes']['listing_feature_complete_page'] );
+		}
+
 		parent::__construct( $args );
 	}
 
