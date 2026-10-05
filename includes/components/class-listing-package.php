@@ -508,18 +508,16 @@ final class Listing_Package extends Component {
 		if ( $package && $package->is_primary() ) {
 
 			// Add class.
-			$blocks = hp\merge_trees(
-				[ 'blocks' => $blocks ],
+			$blocks = hivepress()->template->merge_blocks(
+				$blocks,
 				[
-					'blocks' => [
-						'listing_package_container' => [
-							'attributes' => [
-								'class' => [ 'hp-listing-package--primary' ],
-							],
+					'listing_package_container' => [
+						'attributes' => [
+							'class' => [ 'hp-listing-package--primary' ],
 						],
 					],
 				]
-			)['blocks'];
+			);
 		}
 
 		return $blocks;
@@ -533,17 +531,15 @@ final class Listing_Package extends Component {
 	 */
 	public function alter_listing_edit_block( $template ) {
 		if ( hp\is_plugin_active( 'woocommerce' ) && get_option( 'hp_product_listing_feature' ) ) {
-			$template = hp\merge_trees(
+			$template = hivepress()->template->merge_blocks(
 				$template,
 				[
-					'blocks' => [
-						'listing_actions_primary' => [
-							'blocks' => [
-								'listing_feature_link' => [
-									'type'   => 'part',
-									'path'   => 'listing/edit/block/listing-feature-link',
-									'_order' => 5,
-								],
+					'listing_actions_primary' => [
+						'blocks' => [
+							'listing_feature_link' => [
+								'type'   => 'part',
+								'path'   => 'listing/edit/block/listing-feature-link',
+								'_order' => 5,
 							],
 						],
 					],
@@ -562,17 +558,15 @@ final class Listing_Package extends Component {
 	 */
 	public function alter_listing_edit_page( $template ) {
 		if ( hp\is_plugin_active( 'woocommerce' ) && get_option( 'hp_product_listing_feature' ) ) {
-			$template = hp\merge_trees(
+			$template = hivepress()->template->merge_blocks(
 				$template,
 				[
-					'blocks' => [
-						'listing_actions_secondary' => [
-							'blocks' => [
-								'listing_feature_link' => [
-									'type'   => 'part',
-									'path'   => 'listing/edit/page/listing-feature-link',
-									'_order' => 10,
-								],
+					'listing_actions_secondary' => [
+						'blocks' => [
+							'listing_feature_link' => [
+								'type'   => 'part',
+								'path'   => 'listing/edit/page/listing-feature-link',
+								'_order' => 10,
 							],
 						],
 					],
