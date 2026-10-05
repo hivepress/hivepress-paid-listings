@@ -86,6 +86,30 @@ final class Listing_Package extends Component {
 	}
 
 	/**
+	 * Filters packages by categories.
+	 *
+	 * @param array $packages Packages or user packages.
+	 * @param array $category_ids Category IDs.
+	 * @return array
+	 */
+	public function filter_packages( $packages, $category_ids ) {
+		return array_filter(
+			$packages,
+			function( $package ) use ( $category_ids ) {
+
+				// Get category IDs.
+				$package_category_ids = (array) $package->get_categories__id();
+
+				foreach ( $package_category_ids as $package_category_id ) {
+					$package_category_ids = array_merge( $package_category_ids, get_term_children( $package_category_id, 'hp_listing_category' ) );
+				}
+
+				return ! $package_category_ids || array_intersect( (array) $category_ids, $package_category_ids );
+			}
+		);
+	}
+
+	/**
 	 * Updates user packages.
 	 *
 	 * @param int    $listing_id Listing ID.
@@ -111,12 +135,7 @@ final class Listing_Package extends Component {
 		->get()->serialize();
 
 		// Filter user packages.
-		$user_packages = array_filter(
-			$user_packages,
-			function( $user_package ) use ( $listing ) {
-				return ! $user_package->get_categories__id() || array_intersect( (array) $listing->get_categories__id(), $user_package->get_categories__id() );
-			}
-		);
+		$user_packages = $this->filter_packages( $user_packages, $listing->get_categories__id() );
 
 		if ( empty( $user_packages ) ) {
 			return;
